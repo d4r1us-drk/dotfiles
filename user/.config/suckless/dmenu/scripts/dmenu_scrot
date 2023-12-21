@@ -2,13 +2,13 @@
 
 # ***This script was made by Clay Gomera (Drake)***
 #  - Description: A simple screenshot/screencast dmenu script
-#  - Dependencies: maim, splop, ffmpeg, dmenu, libnotify
+#  - Dependencies: maim, slop, ffmpeg, dmenu, libnotify
 
 #######################################
 ## Screenshot & Screencast Directory ##
 #######################################
-SHOTDIR="$XDG_PICTURES_DIR/screenshots"
-CASTDIR="$XDG_VIDEOS_DIR/screencasts"
+SHOTDIR="$XDG_PICTURES_DIR/Screenshots"
+CASTDIR="$XDG_VIDEOS_DIR/Screencasts"
 [ ! -d "$SHOTDIR" ] && [ ! -d "$CASTDIR" ] && mkdir -p "$SHOTDIR" "$CASTDIR" || echo
 
 ######################
@@ -55,7 +55,7 @@ dels="$del1\n$del2\n$del3"
 ## This function will check for dependencies
 #####
 check_dependencies() {
-  local dependencies=("maim" "ffmpeg" "dmenu" "notify-send" "xclip" "xdotool")
+  local dependencies=("maim" "ffmpeg" "dmenu" "notify-send" "xclip" "xdotool", "xdpyinfo")
   for dep in "${dependencies[@]}"; do
     if ! command -v "$dep" &>/dev/null; then
       echo "$dep is required but not installed. Please install it and try again."

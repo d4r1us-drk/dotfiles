@@ -1,0 +1,79 @@
+From a229c36f51ad6f8b40109ed53c643f242351962a Mon Sep 17 00:00:00 2001
+From: Jonas Dujava <jonas.dujava@gmail.com>
+Date: Fri, 26 May 2023 22:14:48 +0200
+Subject: [PATCH] Warp patch
+
+Warps the mouse cursor to the center of the currently focused
+window or screen when the mouse cursor is
+  (a) on a different screen, or
+  (b) on top of a different window.
+
+This version properly handles warping to windows that have not been
+mapped yet (before it resulted in a change of the stack order).
+See the discussion in (thanks goes to Bakkeby):
+    https://github.com/bakkeby/patches/issues/60
+---
+ dwm.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/dwm.c b/dwm.c
+index e5efb6a..7ea6c14 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -228,6 +228,7 @@ static void updatetitle(Client *c);
+ static void updatewindowtype(Client *c);
+ static void updatewmhints(Client *c);
+ static void view(const Arg *arg);
++static void warp(const Client *c);
+ static Client *wintoclient(Window w);
+ static Monitor *wintomon(Window w);
+ static int xerror(Display *dpy, XErrorEvent *ee);
+@@ -834,6 +835,7 @@ focusmon(const Arg *arg)
+ 	unfocus(selmon->sel, 0);
+ 	selmon = m;
+ 	focus(NULL);
++	warp(selmon->sel);
+ }
+ 
+ void
+@@ -1366,6 +1368,8 @@ restack(Monitor *m)
+ 				wc.sibling = c->win;
+ 			}
+ 	}
++	if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) && m->lt[m->sellt]->arrange != &monocle)
++		warp(m->sel);
+ 	XSync(dpy, False);
+ 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
+ }
+@@ -2044,6 +2048,28 @@ view(const Arg *arg)
+ 	arrange(selmon);
+ }
+ 
++void
++warp(const Client *c)
++{
++	int x, y;
++
++	if (!c) {
++		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->wx + selmon->ww / 2, selmon->wy + selmon->wh / 2);
++		return;
++	}
++
++	if (!getrootptr(&x, &y) ||
++		(x > c->x - c->bw &&
++		 y > c->y - c->bw &&
++		 x < c->x + c->w + c->bw*2 &&
++		 y < c->y + c->h + c->bw*2) ||
++		(y > c->mon->by && y < c->mon->by + bh) ||
++		(c->mon->topbar && !y))
++		return;
++
++	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
++}
++
+ Client *
+ wintoclient(Window w)
+ {
+-- 
+2.40.1
+

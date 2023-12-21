@@ -1,0 +1,14 @@
+#!/bin/sh
+
+export USER="drk"
+export HOME="/home/$USER"
+export XDG_RUNTIME_DIR="/run/user/$(id -u $USER)"
+mkdir $XDG_RUNTIME_DIR
+chown $USER:$USER $XDG_RUNTIME_DIR
+
+groups="$(id -Gn "$USER" | tr ' ' ':')"
+svdir="$HOME/.config/services"
+mkdir -p "$svdir"
+chown $USER:$USER "$svdir"
+
+exec chpst -u "$USER:$groups" runsvdir "$svdir"

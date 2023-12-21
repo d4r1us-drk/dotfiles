@@ -122,25 +122,25 @@ alias \
 # bat as cat
 [ -x "$(command -v bat)" ] && alias cat="bat"
 
-# use emasc for vim if present.
-[ -x "$(command -v nvim)" ] && alias vim="nvim"
+# use lunarvim for vim if present.
+[ -x "$(command -v $HOME/.local/bin/lvim)" ] && alias vim="$HOME/.local/bin/lvim"
 
-# Changing "ls" to "exa"
+# Changing "ls" to "eza"
 alias \
-  ls="exa --icons -al --color=always --group-directories-first" \
-  la="exa --icons -a --color=always --group-directories-first" \
-  ll="exa --icons -l --color=always --group-directories-first" \
-  lt="exa --icons -aT --color=always --group-directories-first" \
-  l.='exa --icons -a | grep -E "^\."'
+  ls="eza --icons -al --color=always --group-directories-first" \
+  la="eza --icons -a --color=always --group-directories-first" \
+  ll="eza --icons -l --color=always --group-directories-first" \
+  lt="eza --icons -aT --color=always --group-directories-first" \
+  l.='eza --icons -a | grep -E "^\."'
 
 # function to detect os and assign aliases to package managers
 alias \
-  pac-up="paru -Syu" \
-  pac-get="paru -S" \
-  pac-rmv="paru -Rcns" \
-  pac-rmv-sec="paru -R" \
-  pac-qry="paru -Ss" \
-  pac-cln="paru -Scc && paru -Rns $(pacman -Qtdq)"
+  xb-up="sudo xbps-install -Su && xcheckrestart" \
+  xb-get="sudo xbps-install -S" \
+  xb-rmv="sudo xbps-remove -R" \
+  xb-rmv-sec="sudo xbps-remove" \
+  xb-qry="sudo xbps-query -Rs" \
+  xb-cln="sudo xbps-remove -Oo"
 
 # colorize grep output (good for log files)
 alias \
@@ -177,21 +177,19 @@ alias \
 # audio
 alias \
   mx="pulsemixer" \
-  amx="alsamixer" \
   mk="cmus" \
   ms="cmus" \
   music="cmus"
 
 # power management
 alias \
-  po="systemctl poweroff" \
-  sp="systemctl suspend" \
-  rb="systemctl reboot"
+  po="loginctl poweroff" \
+  sp="loginctl suspend" \
+  rb="loginctl reboot"
 
 # file management
 alias \
   fm="vifm" \
-  file="vifm" \
   flm="vifm" \
   rm="rm -vI" \
   mv="mv -iv" \

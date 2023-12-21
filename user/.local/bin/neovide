@@ -1,2 +1,6 @@
-#!/usr/bin/env bash
-neovide --neovim-bin "$HOME/.local/bin/lvim"
+#!/bin/sh
+
+NEOVIDE="$HOME/.local/bin/neovide.AppImage"
+NEOVIDE_OPTS="--neovim-bin $HOME/.local/bin/lvim"
+
+$NEOVIDE $NEOVIDE_OPTS

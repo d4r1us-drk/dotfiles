@@ -59,16 +59,12 @@ static Clr *scheme[SchemeLast];
 static int (*fstrncmp)(const char *, const char *, size_t) = strncmp;
 static char *(*fstrstr)(const char *, const char *) = strstr;
 
-static unsigned int
-textw_clamp(const char *str, unsigned int n)
-{
+static unsigned int textw_clamp(const char *str, unsigned int n) {
 	unsigned int w = drw_fontset_getwidth_clamp(drw, str, n) + lrpad;
 	return MIN(w, n);
 }
 
-static void
-appenditem(struct item *item, struct item **list, struct item **last)
-{
+static void appenditem(struct item *item, struct item **list, struct item **last) {
 	if (*last)
 		(*last)->right = item;
 	else
@@ -79,9 +75,7 @@ appenditem(struct item *item, struct item **list, struct item **last)
 	*last = item;
 }
 
-static void
-calcoffsets(void)
-{
+static void calcoffsets(void) {
 	int i, n;
 
 	if (lines > 0)
@@ -97,9 +91,7 @@ calcoffsets(void)
 			break;
 }
 
-static void
-cleanup(void)
-{
+static void cleanup(void) {
 	size_t i;
 
 	XUngrabKey(dpy, AnyKey, AnyModifier, root);
@@ -113,9 +105,7 @@ cleanup(void)
 	XCloseDisplay(dpy);
 }
 
-static char *
-cistrstr(const char *h, const char *n)
-{
+static char *cistrstr(const char *h, const char *n) {
 	size_t i;
 
 	if (!n[0])
@@ -131,9 +121,7 @@ cistrstr(const char *h, const char *n)
 	return NULL;
 }
 
-static void
-drawhighlights(struct item *item, int x, int y, int maxw)
-{
+static void drawhighlights(struct item *item, int x, int y, int maxw) {
 	char restorechar, tokens[sizeof text], *highlight,  *token;
 	int indentx, highlightlen;
 
@@ -168,9 +156,7 @@ drawhighlights(struct item *item, int x, int y, int maxw)
 	}
 }
 
-static int
-drawitem(struct item *item, int x, int y, int w)
-{
+static int drawitem(struct item *item, int x, int y, int w) {
 	if (item == sel)
 		drw_setscheme(drw, scheme[SchemeSel]);
 	else if (item->out)
@@ -183,9 +169,7 @@ drawitem(struct item *item, int x, int y, int w)
 	return r;
 }
 
-static void
-drawmenu(void)
-{
+static void drawmenu(void) {
 	unsigned int curpos;
 	struct item *item;
 	int x = 0, y = 0, w;
@@ -238,9 +222,7 @@ drawmenu(void)
 	drw_map(drw, win, 0, 0, mw, mh);
 }
 
-static void
-grabfocus(void)
-{
+static void grabfocus(void) {
 	struct timespec ts = { .tv_sec = 0, .tv_nsec = 10000000  };
 	Window focuswin;
 	int i, revertwin;
@@ -255,9 +237,7 @@ grabfocus(void)
 	die("cannot grab focus");
 }
 
-static void
-grabkeyboard(void)
-{
+static void grabkeyboard(void) {
 	struct timespec ts = { .tv_sec = 0, .tv_nsec = 1000000  };
 	int i;
 
@@ -273,9 +253,7 @@ grabkeyboard(void)
 	die("cannot grab keyboard");
 }
 
-int
-compare_distance(const void *a, const void *b)
-{
+int compare_distance(const void *a, const void *b) {
 	struct item *da = *(struct item **) a;
 	struct item *db = *(struct item **) b;
 
@@ -287,9 +265,7 @@ compare_distance(const void *a, const void *b)
 	return da->distance == db->distance ? 0 : da->distance < db->distance ? -1 : 1;
 }
 
-void
-fuzzymatch(void)
-{
+void fuzzymatch(void) {
 	/* bang - we have so much memory */
 	struct item *it;
 	struct item **fuzzymatches = NULL;
@@ -354,9 +330,7 @@ fuzzymatch(void)
 	calcoffsets();
 }
 
-static void
-match(void)
-{
+static void match(void) {
 	if (fuzzy) {
 		fuzzymatch();
 		return;
@@ -412,9 +386,7 @@ match(void)
 	calcoffsets();
 }
 
-static void
-insert(const char *str, ssize_t n)
-{
+static void insert(const char *str, ssize_t n) {
 	if (strlen(text) + n > sizeof text - 1)
 		return;
 	/* move existing text out of the way, insert new text, and update cursor */
@@ -425,9 +397,7 @@ insert(const char *str, ssize_t n)
 	match();
 }
 
-static size_t
-nextrune(int inc)
-{
+static size_t nextrune(int inc) {
 	ssize_t n;
 
 	/* return location of next utf8 rune in the given direction (+1 or -1) */
@@ -436,9 +406,7 @@ nextrune(int inc)
 	return n;
 }
 
-static void
-movewordedge(int dir)
-{
+static void movewordedge(int dir) {
 	if (dir < 0) { /* move cursor to the start of the word*/
 		while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
 			cursor = nextrune(-1);
@@ -452,9 +420,7 @@ movewordedge(int dir)
 	}
 }
 
-static void
-keypress(XKeyEvent *ev)
-{
+static void keypress(XKeyEvent *ev) {
 	char buf[32];
 	int len;
 	KeySym ksym;
@@ -659,9 +625,7 @@ draw:
 	drawmenu();
 }
 
-static void
-buttonpress(XEvent *e)
-{
+static void buttonpress(XEvent *e) {
 	struct item *item;
 	XButtonPressedEvent *ev = &e->xbutton;
 	int x = 0, y = 0, h = bh, w;
@@ -772,9 +736,7 @@ buttonpress(XEvent *e)
 	}
 }
 
-static void
-motionevent(XButtonEvent *ev)
-{
+static void motionevent(XButtonEvent *ev) {
 	struct item *it;
 	int xy, ev_xy;
 
@@ -795,9 +757,7 @@ motionevent(XButtonEvent *ev)
 	}
 }
 
-static void
-paste(void)
-{
+static void paste(void) {
 	char *p, *q;
 	int di;
 	unsigned long dl;
@@ -813,9 +773,7 @@ paste(void)
 	drawmenu();
 }
 
-static void
-readstdin(void)
-{
+static void readstdin(void) {
 	char *line = NULL;
 	size_t i, junk, size = 0;
 	ssize_t len;
@@ -839,9 +797,7 @@ readstdin(void)
 	lines = MIN(lines, i);
 }
 
-static void
-run(void)
-{
+static void run(void) {
 	XEvent ev;
 
 	while (!XNextEvent(dpy, &ev)) {
@@ -883,9 +839,7 @@ run(void)
 	}
 }
 
-static void
-setup(void)
-{
+static void setup(void) {
 	int x, y, i, j;
 	unsigned int du;
 	XSetWindowAttributes swa;
@@ -985,16 +939,12 @@ setup(void)
 	drawmenu();
 }
 
-static void
-usage(void)
-{
+static void usage(void) {
 	die("usage: dmenu [-bfivP] [-l lines] [-p prompt] [-fn font] [-m monitor]\n"
 	    "             [-nb color] [-nf color] [-sb color] [-sf color] [-w windowid]");
 }
 
-int
-main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	XWindowAttributes wa;
 	int i, fast = 0;
 

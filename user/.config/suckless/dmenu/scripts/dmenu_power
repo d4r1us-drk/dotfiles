@@ -39,13 +39,13 @@ case "$action" in
         pkill X; # killing X will result in a logout
         ;;
     "$option2")
-        systemctl reboot || loginctl reboot;
+        loginctl reboot;
         ;;
     "$option3")
-        systemctl poweroff || loginctl poweroff;
+        loginctl poweroff;
         ;;
     "$option4")
-        slock systemctl suspend || slock loginctl suspend;
+        slock loginctl suspend;
         ;;
     "$option5")
         slock;

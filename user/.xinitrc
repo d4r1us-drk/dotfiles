@@ -31,6 +31,7 @@ fi
 # environment variables
 export MOZ_USE_XINPUT2=1
 export QT_STYLE_OVERRIDE=kvantum
+export XDG_SESSION_TYPE=X11
 
 # clean home
 export XDG_DATA_HOME="$HOME/.local/share"

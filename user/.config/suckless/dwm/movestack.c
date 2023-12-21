@@ -1,5 +1,4 @@
-void
-movestack(const Arg *arg) {
+void movestack(const Arg *arg) {
 	Client *c = NULL, *p = NULL, *pc = NULL, *i;
 
 	if(arg->i > 0) {
@@ -19,6 +18,7 @@ movestack(const Arg *arg) {
 				if(ISVISIBLE(i) && !i->isfloating)
 					c = i;
 	}
+
 	/* find the client before selmon->sel and c */
 	for(i = selmon->clients; i && (!p || !pc); i = i->next) {
 		if(i->next == selmon->sel)

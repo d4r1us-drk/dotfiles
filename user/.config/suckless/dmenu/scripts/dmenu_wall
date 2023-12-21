@@ -7,7 +7,7 @@
 ##########################
 ## Wallpapers Directory ##
 ##########################
-walldir="$XDG_PICTURES_DIR/wallpapers"
+walldir="$XDG_PICTURES_DIR/Wallpapers"
 cd "$walldir" || exit # we cd into $walldir in order to get only the file name on the main prompt
 
 #######################

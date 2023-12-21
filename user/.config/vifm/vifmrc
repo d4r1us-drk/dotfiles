@@ -65,7 +65,7 @@ set norunexec
 " Selected color scheme
 " The following line will cause issues if using vifm.vim with regular vim.
 " Either use neovim or comment out the following line.
-colorscheme gruvbox
+colorscheme gruvbox-dark
 
 " Format for displaying time in file list. For example:
 " TIME_STAMP_FORMAT=%m/%d-%H:%M
@@ -172,12 +172,10 @@ command! reload :write | restart
 " You can also add %CLEAR if you want to clear screen before running FUSE
 " program.
 
-" Pdf
-filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
+" Pdf and cbz
+filextype *.cbz,*.pdf zathura %c %i &, apvlv %c, xpdf %c
 fileviewer *.pdf
-        \ vifmimg pdf %px %py %pw %ph %c
-        \ %pc
-        \ vifmimg clear
+        \ pdftotext -nopgbrk %c -
 
 " PostScript
 filextype *.ps,*.eps,*.ps.gz
@@ -192,43 +190,24 @@ filextype *.djvu
         \ zathura %f,
         \ {View in apvlv}
         \ apvlv %f,
-fileviewer *.djvu
-        \ vifmimg djvu %px %py %pw %ph %c
-        \ %pc
-        \ vifmimg clear
-
-" Epub
-fileviewer *.epub
-        \ vifmimg epub %px %py %pw %ph %c
-        \ %pc
-        \ vifmimg clear
 
 " Audio
 filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
        \ {Play using mpv}
        \ mpv %f,
-filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
-       \ vifmimg audio %px %py %pw %ph %c
-       \ %pc
-       \ vifmimg clearfileviewer *.mp3 mp3info
+fileviewer *.mp3 mp3info
+fileviewer *.flac soxi
 
 " Video
 filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
-        \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
-        \*.as[fx]
-        \ {View using mpv}
+         \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+         \*.as[fx]
+        \ {View using mplayer}
         \ mpv %f,
-        \ {View using ffplay}
-        \ ffplay -fs -autoexit %f,
-        \ {View using Dragon}
-        \ dragon %f:p,
 fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
-        \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
-        \*.as[fx]
-        \ vifmimg video %px %py %pw %ph %c
-        \ %pc
-        \ vifmimg clear
-        " \ ffprobe -pretty %c 2>&1
+          \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+          \*.as[fx]
+          \ ffprobe -pretty %c 2>&1
 
 " Web
 filextype *.html,*.htm
@@ -253,18 +232,10 @@ fileviewer *.[1-8] man ./%c | col -b
 
 " Images
 filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
-        \ {View in sxiv}
-        \ sxiv -ia %f &,
         \ {View in imv}
-        \ imv -b 1D2330 -d %d &,
-        \ {View in feh}
-        \ feh %d &,
-        \ {View in cacaview}
-        \ cacaview %c &,
-fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
-        \ vifmimg draw %px %py %pw %ph %c
-        \ %pc
-        \ vifmimg clear
+        \ imv %f &,
+fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.xpm,*.gif
+        \ wezterm imgcat --width %pw --height %ph %c:p %pd
 
 " OpenRaster
 filextype *.ora
@@ -302,7 +273,8 @@ filetype *.asc
        \ !!gpg --verify %c,
 
 " Torrent
-filetype *.torrent qbittorrent %f &
+filetype *.torrent ktorrent %f &
+fileviewer *.torrent dumptorrent -v %c
 
 " FuseZipMount
 filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
