@@ -1,12 +1,11 @@
 # DRK's dotfiles (suckless)
-This repository contains the dotfiles for my dwm (Dynamic Window Manager)
-setup. Below are the keybindings and explanations for various actions in dwm.
+This repository contains the dotfiles for my dwm (Dynamic Window Manager) setup. Below are the keybindings and explanations for various actions in dwm.
 
-Feel free to explore the configuration files and adapt them to your
-preferences. If you have any questions or suggestions, please open an issue in
-this repository.
+Feel free to explore the configuration files and adapt them to your preferences. If you have any questions or suggestions, please open an issue in this repository.
 
 Enjoy your dwm experience!
+
+![cool-screenshot](./screenshot.png)
 
 ## Layouts
 These are the supported layots in my dwm build
@@ -19,12 +18,10 @@ These are the supported layots in my dwm build
 - Spiral: Similar to dwindle but in the opposite direction.
 
 ## Scratchpads
-A scratchpad is a convenient way to access and hide frequently used
-applications. Applications launched in a scratchpad can be toggled with a
-keybinding, making it easy to keep them accessible without cluttering the main
-workspace.
+A scratchpad is a convenient way to access and hide frequently used applications. Applications launched in a scratchpad can be toggled with a keybinding, making it easy to keep them accessible without cluttering the main workspace.
 
 The following applications are configured to be launched in the scratchpad:
+
 - Terminal (wezterm)
 - System Monitor (btop)
 - Audio Mixer (pulsemixer)
@@ -37,21 +34,11 @@ The following applications are configured to be launched in the scratchpad:
 - News Reader (newsboat)
 
 ## Keychords
-A keychord refers to a combination of two or more keybindings pressed one after
-another to trigger a specific action or function. This feature is particularly
-powerful for users who want to improve their workflow by assigning complex
-layers of keybindings for all kinds of purposes. The keychord patch in dwm
-extends its native keybinding capabilities, allowing users to create powerful
-and efficient combinations for various tasks.
+A keychord refers to a combination of two or more keybindings pressed one after another to trigger a specific action or function. This feature is particularly powerful for users who want to improve their workflow by assigning complex layers of keybindings for all kinds of purposes. The keychord patch in dwm extends its native keybinding capabilities, allowing users to create powerful and efficient combinations for various tasks.
 
-An analogous example can be drawn from the Emacs text editor, which pioneered
-the concept of keychords. In Emacs, pressing a sequence of keybindings in
-order, such as "Ctrl" and "x," followed by "Ctrl" and "f" (written as `C-x
-C-f`), opens the file menu.
+An analogous example can be drawn from the Emacs text editor, which pioneered the concept of keychords. In Emacs, pressing a sequence of keybindings in order, such as "Ctrl" and "x," followed by "Ctrl" and "f" (written as `C-x C-f`), opens the file menu.
 
-In my dwm build I use keychords for changing keyboard layouts, launching
-applications or scratchpads and more. This is the way I manage some of my
-keybindings, so I can have tons of keybindings for whatever I will ever need.
+In my dwm build I use keychords for changing keyboard layouts, launching applications or scratchpads and more. This is the way I manage some of my keybindings, so I can have tons of keybindings for whatever I will ever need.
 
 ## Main Configuration Files
 - `user/.config/suckless/dwm/config.h`: Main configuration file for dwm.
@@ -177,11 +164,7 @@ keybindings, so I can have tons of keybindings for whatever I will ever need.
 | `MODKEY + x, r` | Launch newsboat (news reader) in scratchpad |
 
 ## Dependencies
-This section shows the various dependencies I need for my setup, you don't need
-all of them to get everything working, most of them are personal choice. These
-commands are for Void Linux only, but you can see the packages you need, so
-it's easy to find them for your distribution. All my other applications come
-from flatpak.
+This section shows the various dependencies I need for my setup, you don't need all of them to get everything working, most of them are personal choice. These commands are for Void Linux only, but you can see the packages you need, so it's easy to find them for your distribution. All my other applications come from flatpak.
 
 ### System dependencies
 ``` sh

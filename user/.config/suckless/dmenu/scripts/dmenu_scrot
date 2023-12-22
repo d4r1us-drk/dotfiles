@@ -7,10 +7,7 @@
 ## Screenshot & Screencast Directory
 SHOTDIR="$XDG_PICTURES_DIR/Screenshots"
 CASTDIR="$XDG_VIDEOS_DIR/Screencasts"
-
-if [ ! -d "$SHOTDIR" ] && [ ! -d "$CASTDIR" ]; then
-    mkdir -p "$SHOTDIR" "$CASTDIR"
-fi
+mkdir -p "$SHOTDIR" "$CASTDIR"
 
 ## Format Variables
 image_formats="jpg\npng"
@@ -116,23 +113,24 @@ shot_screen_delay() {
         "$del1")
             for i in 3 2 1; do
                 notify-send -t 1000 "Capturing in $i.."
-                sleep 0.1
+                sleep 1
             done
             ;;
         "$del2")
             for i in 5 4 3 2 1; do
                 notify-send -t 1000 "Capturing in $i.."
-                sleep 0.1
+                sleep 1
             done
             ;;
         "$del3")
             for i in 10 9 8 7 6 5 4 3 2 1; do
                 notify-send -t 1000 "Capturing in $i.."
-                sleep 0.1
+                sleep 1
             done
             ;;
     esac
 
+    sleep 1
     if [ "$svchoice" = "$svcho1" ]; then
         maim | xclip -selection clipboard -t image/"$image_format" && notify-send "Screenshot saved to clipboard";
     elif [ "$svchoice" = "$svcho2" ]; then
@@ -204,23 +202,24 @@ rec_screen_delay() {
         "$del1")
             for i in 3 2 1; do
               notify-send -t 1000 "Starting in $i.."
-              sleep 0.1
+              sleep 1
             done
             ;;
         "$del2")
             for i in 5 4 3 2 1; do
               notify-send -t 1000 "Starting in $i.."
-              sleep 0.1
+              sleep 1
             done
             ;;
         "$del3")
             for i in 10 9 8 7 6 5 4 3 2 1; do
                 notify-send -t 1000 "Starting in $i.."
-                sleep 0.1
+                sleep 1
             done
             ;;
     esac
 
+    sleep 1
     if pgrep -x "ffmpeg" > /dev/null; then
         notify-send "A screen recording is already in progress."
     else 
