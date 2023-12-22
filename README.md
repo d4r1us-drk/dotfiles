@@ -83,6 +83,7 @@ keybindings, so I can have tons of keybindings for whatever I will ever need.
 | `MODKEY + Control + r` | Restart dwm |
 | `MODKEY + x, e` | Switch to the Spanish keyboard layout |
 | `MODKEY + x, u` | Switch to the US keyboard layout |
+| `MODKEY + 1-9` | Switch to the # workspace |
 
 ### Dmenu keybindings
 | Keybinding | Action                            |
