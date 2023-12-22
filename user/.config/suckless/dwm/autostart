@@ -17,4 +17,4 @@ wireplumber &
 dwmblocks &
 sh "$HOME"/.fehbg &
 unclutter --hide-on-touch &
-picom --no-fading-openclose --config "$HOME/.config/picom/picom.conf" &
+picom --config "$HOME/.config/picom/picom.conf" &

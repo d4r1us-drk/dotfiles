@@ -1,0 +1,128 @@
+From d781863fb98f066d1ad98b573796d0880b48af8f Mon Sep 17 00:00:00 2001
+From: verschmelzen <ivan.komarov@protonmail.com>
+Date: Wed, 19 Aug 2020 00:05:34 +0300
+Subject: [PATCH] Resize windows with touchpad two-finger scroll
+
+This patch allows to resize windows using mouse scroll events. Since
+there is no right-click-tap-to-drag I found this patch to be the only
+way to be able to both move and resize windows with touchpad.
+---
+ config.def.h | 16 ++++++++++++++++
+ dwm.c        | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+
+diff --git a/config.def.h b/config.def.h
+index 1c0b587..d7d208f 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -36,6 +36,9 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95]
+ static const int nmaster     = 1;    /* number of clients in master area */
+ static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+ 
++/* mouse scroll resize */
++static const int scrollsensetivity = 30; /* 1 means resize window by 1 pixel for each scroll event */
++
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+ 	{ "[]=",      tile },    /* first entry is default */
+@@ -96,6 +99,15 @@ static Key keys[] = {
+ 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+ };
+ 
++/* resizemousescroll direction argument list */
++static const int scrollargs[][2] = {
++	/* width change         height change */
++	{ +scrollsensetivity,	0 },
++	{ -scrollsensetivity,	0 },
++	{ 0, 				  	+scrollsensetivity },
++	{ 0, 					-scrollsensetivity },
++};
++
+ /* button definitions */
+ /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+ static Button buttons[] = {
+@@ -107,6 +119,10 @@ static Button buttons[] = {
+ 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+ 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+ 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
++	{ ClkClientWin,         MODKEY,         Button4,        resizemousescroll, {.v = &scrollargs[0]} },
++	{ ClkClientWin,         MODKEY,         Button5,        resizemousescroll, {.v = &scrollargs[1]} },
++	{ ClkClientWin,         MODKEY,         Button6,        resizemousescroll, {.v = &scrollargs[2]} },
++	{ ClkClientWin,         MODKEY,         Button7,        resizemousescroll, {.v = &scrollargs[3]} },
+ 	{ ClkTagBar,            0,              Button1,        view,           {0} },
+ 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
+ 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+diff --git a/dwm.c b/dwm.c
+index 9fd0286..30f14db 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -57,6 +57,12 @@
+ #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
+ #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
+ 
++/* Undefined in X11/X.h buttons that are actualy exist and correspond to
++ * horizontal scroll
++ */
++#define Button6			6
++#define Button7			7
++
+ /* enums */
+ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
+ enum { SchemeNorm, SchemeSel }; /* color schemes */
+@@ -192,6 +198,7 @@ static Monitor *recttomon(int x, int y, int w, int h);
+ static void resize(Client *c, int x, int y, int w, int h, int interact);
+ static void resizeclient(Client *c, int x, int y, int w, int h);
+ static void resizemouse(const Arg *arg);
++static void resizemousescroll(const Arg *arg);
+ static void restack(Monitor *m);
+ static void run(void);
+ static void scan(void);
+@@ -1345,6 +1352,45 @@ resizemouse(const Arg *arg)
+ 	}
+ }
+ 
++void
++resizemousescroll(const Arg *arg)
++{
++	int nw, nh;
++	Client *c;
++	Monitor *m;
++	XEvent ev;
++	int dw = *((int*)arg->v + 1);
++	int dh = *(int*)arg->v;
++
++	if (!(c = selmon->sel))
++		return;
++	if (c->isfullscreen) /* no support resizing fullscreen windows by mouse */
++		return;
++	restack(selmon);
++	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
++		None, cursor[CurResize]->cursor, CurrentTime) != GrabSuccess)
++		return;
++	nw = MAX(c->w + dw, 1);
++	nh = MAX(c->h + dh, 1);
++	if (c->mon->wx + nw >= selmon->wx && c->mon->wx + nw <= selmon->wx + selmon->ww
++	&& c->mon->wy + nh >= selmon->wy && c->mon->wy + nh <= selmon->wy + selmon->wh)
++	{
++		if (!c->isfloating && selmon->lt[selmon->sellt]->arrange
++		&& (abs(nw - c->w) > snap || abs(nh - c->h) > snap))
++			togglefloating(NULL);
++	}
++	if (!selmon->lt[selmon->sellt]->arrange || c->isfloating)
++		resize(c, c->x, c->y, nw, nh, 1);
++	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
++	XUngrabPointer(dpy, CurrentTime);
++	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
++	if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
++		sendmon(c, m);
++		selmon = m;
++		focus(NULL);
++	}
++}
++
+ void
+ restack(Monitor *m)
+ {
+-- 
+2.28.0
+

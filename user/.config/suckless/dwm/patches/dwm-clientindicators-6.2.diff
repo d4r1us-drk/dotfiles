@@ -1,0 +1,48 @@
+From 8c72f9ea7c9cd8d254b52a4f7059113c41483597 Mon Sep 17 00:00:00 2001
+From: Miles Alan <m@milesalan.com>
+Date: Mon, 17 Aug 2020 20:33:45 -0500
+Subject: [PATCH] Draws a dot indicator overlayed on each tag icon for each
+ client. The selected client is drawn as a larger horizontal line.
+
+---
+ dwm.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/dwm.c b/dwm.c
+index 4465af1..e0ca438 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -695,6 +695,7 @@ dirtomon(int dir)
+ void
+ drawbar(Monitor *m)
+ {
++	int indn;
+ 	int x, w, sw = 0;
+ 	int boxs = drw->fonts->h / 9;
+ 	int boxw = drw->fonts->h / 6 + 2;
+@@ -715,13 +716,18 @@ drawbar(Monitor *m)
+ 	}
+ 	x = 0;
+ 	for (i = 0; i < LENGTH(tags); i++) {
++		indn = 0;
+ 		w = TEXTW(tags[i]);
+ 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+ 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+-		if (occ & 1 << i)
+-			drw_rect(drw, x + boxs, boxs, boxw, boxw,
+-				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
+-				urg & 1 << i);
++
++		for (c = m->clients; c; c = c->next) {
++			if (c->tags & (1 << i)) {
++				drw_rect(drw, x, 1 + (indn * 2), selmon->sel == c ? 6 : 1, 1, 1, urg & 1 << i);
++				indn++;
++			}
++		}
++
+ 		x += w;
+ 	}
+ 	w = blw = TEXTW(m->ltsymbol);
+-- 
+2.25.4
+

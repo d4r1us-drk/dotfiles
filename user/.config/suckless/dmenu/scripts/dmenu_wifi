@@ -4,9 +4,7 @@
 #  - Description: A simple wifi dmenu script
 #  - Dependencies: dmenu, NetworkManager
 
-#######################
-## Main manu options ##
-#######################
+## Main manu options
 option1="  Turn on WiFi"
 option2="  Turn off WiFi"
 option3="󱛅  Disconnect WiFi"
@@ -16,107 +14,79 @@ option6="󱎘  Exit"
 options="$option1\n$option2\n$option3\n$option4\n$option5\n$option6"
 
 #####
-## These variables will store specific
-## information about the wireless
-## interface
+## These variables will store specific information about the wirelessinterface
 #####
 wifi_info=$(nmcli dev | awk '/wifi/ {print $1,$3; exit}')
 read -r wlan constate <<< "$wifi_info"
 
 #####
-## This function uses nmcli to turn
-## off wifi and then sends a
-## notification
-#####
-## param: none
-## return: void
+## This function uses nmcli to turn off wifi and then sends a notification
 #####
 turnoff() {
-    nmcli radio wifi off && notify-send "WiFi has been turned off";
+    nmcli radio wifi off && notify-send "WiFi has been turned off"
 }
 
 #####
-## This function uses nmcli to turn
-## on wifi and then sends a
-## notification
-#####
-## param: none
-## return: void
+## This function uses nmcli to turn on wifi and then sends a notification
 #####
 turnon() {
-    nmcli radio wifi on && notify-send "WiFi has been turned on";
+    nmcli radio wifi on && notify-send "WiFi has been turned on"
 }
 
 #####
-## This function uses nmcli and the
-## $wlan and $constate variables to
-## disconnect from the wifi network
-## and then sends a notification
-#####
-## param: none
-## return: void
+## This function uses nmcli and the $wlan and $constate variables to disconnect
+## from the wifi network and then sends a notification
 #####
 disconnect() {
     if [ "$constate" = "disconnected" ]; then
-        notify-send "WiFi is already disconnected";
+        notify-send "WiFi is already disconnected"
     elif [ "$constate" = "connected" ]; then
-        nmcli device disconnect "$wlan" && notify-send "Wifi has been disconnected";
+        nmcli device disconnect "$wlan" && notify-send "Wifi has been disconnected"
     else
-        exit 1;
+        exit 1
     fi
 }
 
 #####
-## This function uses nmcli to first scan
-## for available networks and then the
-## $bssid variable will store the SSID
-## of the network that the user chooses
-#####
-## param: none
-## return: string
+## This function uses nmcli to first scan for available networks and then the
+## $bssid variable will store the SSID of the network that the user chooses
 #####
 connect() {
-    notify-send "Scannig networks..." && nmcli dev wifi rescan;
-    wifinet=$(nmcli -f BSSID,SSID,BARS,SECURITY dev wifi list | sed -n '1!p' | dmenu -i -l 10 -p "  Select a Wifi Network");
+    notify-send -t 5000 "Scanning networks..."
+    nmcli dev wifi rescan
+    sleep 1
+    wifinet=$(nmcli -f BSSID,SSID,BARS,SECURITY dev wifi list | sed -n '1!p' | dmenu -i -l 10 -p "  Select a Wifi Network")
     bssid=$(echo "$wifinet" | cut -d' ' -f1)
     ssid=$(echo "$wifinet" | cut -d' ' -f3)
 }
 
 #####
-## This function will store the WiFi
-## password in the $pass variable
-#####
-## param: none
-## return: string
+## This function will store the WiFi password in the $pass variable
 #####
 password() {
     if nmcli connection show | grep -q "$ssid"; then # check if the network is already saved
-        return 0; # no password is required
+        return 0 # no password is required
     elif nmcli -f BSSID,SECURITY dev wifi list | sed -n '1!p' | grep "$bssid" | awk '{print $2}' | grep -q -- "--"; then # check if the network is open
-        return 0; # no password is required
+        return 0 # no password is required
     else
-        pass=$(dmenu -i -l 1 -P -p "Enter Password " --password);
+        pass=$(dmenu -i -l 1 -P -p "Enter Password " --password)
         if [ -n "$pass" ]; then # if the user gave a password
-            return 0;
+            return 0
         else
-            exit 1; # if not, exit the script
+            exit 1 # if not, exit the script
         fi
     fi
 }
 
 #####
-## This function will actually connect
-## to the chosen WiFi network using the
+## This function will actually connect to the chosen WiFi network using the
 ## $bssid and $pass variables
-#####
-## param: none
-## return: void
 #####
 action() {
     if [ -n "$pass" ]; then # we need to check again if the $pass variable exists
         nmcli dev wifi connect "$bssid" password "$pass"
     else # if not, that means that the password() function ended in one of the first two conditions, the network is saved or open
-        nmcli dev wifi connect "$bssid";
+        nmcli dev wifi connect "$bssid"
     fi
 }
 
@@ -126,25 +96,25 @@ action() {
 cases=$(echo -e "$options" | dmenu -l 6 -i -p "  Wifi Settings" ) # main menu prompt
 case "$cases" in
     "$option1")
-        turnon;
+        turnon
         ;;
     "$option2")
-        turnoff;
+        turnoff
         ;;
     "$option3")
-        disconnect;
+        disconnect
         ;;
     "$option4")
         if connect; then # if the user chooses a network
-            password; # this function will exit the script if the user didn't put a password
-            action;
+            password # this function will exit the script if the user didn't put a password
+            action
         else
-            exit 1; # if not, exit the script
+            exit 1 # if not, exit the script
         fi
         ;;
     "$option5")
-        "$BROWSER" http://networkcheck.kde.org;
+        "$BROWSER" http://networkcheck.kde.org
         ;;
     "$option6")
-        exit 0;
+        exit 0
 esac

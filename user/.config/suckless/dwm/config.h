@@ -1,8 +1,5 @@
-#include "movestack.c"
-
 /* appearance */
 static const unsigned int borderpx    = 1;        /* border pixel of windows */
-static const unsigned int gappx       = 0;        /* gaps between windows */
 static const unsigned int snap        = 32;       /* snap pixel */
 static const int showbar              = 1;        /* 0 means no bar */
 static const int topbar               = 1;        /* 0 means bottom bar */
@@ -10,6 +7,7 @@ static const int vertpad              = 0;        /* vertical padding of bar */
 static const int sidepad              = 0;        /* horizontal padding of bar */
 static const int horizpadbar          = 2;        /* horizontal padding for statusbar */
 static const int vertpadbar           = 4;        /* vertical padding for statusbar */
+static const int rmaster              = 0;        /* 1 means master-area is initially on the left */
 static const char *fonts[]            = {"Symbols Nerd Font Mono:size=12", "mononoki Nerd Font:size=12"};
 static const char dmenufont[]         = {"mononoki Nerd Font:size=12"};
 static const char col_gray1[]         = "#1d2021";
@@ -83,6 +81,7 @@ static const Rule rules[] = {
     {"Galculator",                NULL,        NULL,         0,   1,   -1},
     {"Qalculate-gtk",             NULL,        NULL,         0,   1,   -1},
     /* 1 - Code Tag */
+    {"editor",                    NULL,        NULL,         1,   0,   -1},
     {"Emacs",                     NULL,        NULL,         1,   0,   -1},
     {"Godot",                     NULL,        NULL,         1,   0,   -1},
     {"neovim",                    NULL,        NULL,         1,   0,   -1},
@@ -153,31 +152,45 @@ static const Rule rules[] = {
 };
 
 /* Layout(s) */
-static const float mfact          = 0.5;  // factor of master area size [0.05..0.95]
-static const int   nmaster        = 1;    // number of clients in master area
-static const int   resizehints    = 1;    // 1 means respect size hints in tiled resizals
-static const int   lockfullscreen = 1;    // 1 will force focus on the fullscreen window
+static const float mfact          = 0.5;  /* factor of master area size [0.05..0.95] */
+static const int   nmaster        = 1;    /* number of clients in master area */
+static const int   resizehints    = 0;    /* 1 means respect size hints in tiled resizals */
+static const int   lockfullscreen = 1;    /* 1 will force focus on the fullscreen window */
 static const Layout layouts[] = {
     /* symbol     arrange function */
     { "[]=",    tile },    /* first entry is default */
-    { "><>",    NULL },    /* no layout function means floating behavior */
+    { "><>",    NULL },
     { "[M]",    monocle },
+    { "|||",    centeredmaster },
+    { ">|>",    centeredfloatingmaster },
+ 	{ "[@]",    spiral },
+ 	{ "[\\]",   dwindle },
+    { "HHH",    grid },
+	{ NULL,     NULL },
 };
 
-/* key definitions */
+/* Key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
-    &((Keychord){1, {{MODKEY, KEY}},                                    view,           {.ui = 1 << TAG} }), \
+        &((Keychord){1, {{MODKEY, KEY}},                                comboview,      {.ui = 1 << TAG} }), \
         &((Keychord){1, {{MODKEY|ControlMask, KEY}},                    toggleview,     {.ui = 1 << TAG} }), \
-        &((Keychord){1, {{MODKEY|ShiftMask, KEY}},						tag,            {.ui = 1 << TAG} }), \
+        &((Keychord){1, {{MODKEY|ShiftMask, KEY}},						combotag,       {.ui = 1 << TAG} }), \
         &((Keychord){1, {{MODKEY|ControlMask|ShiftMask, KEY}},			toggletag,      {.ui = 1 << TAG} }),
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* Main commands */
-static const char *dmenucmd[] = {"dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL};
-static const char *termcmd[]  = { "wezterm", NULL };
+static const char *dmenucmd[]      = {"dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL};
+static const char *termcmd[]       = { "wezterm", NULL };
+static const char *editor[]        = { "wezterm", "start", "--class", "editor", ".local/bin/lvim", NULL};
+static const char *browser[]       = { "qutebrowser", NULL };
+static const char *chat[]          = { "flatpak", "run", "org.signal.Signal", NULL };
+static const char *virtuamachine[] = { "virt-manager", NULL };
+static const char *office[]        = { "flatpak", "run", "org.libreoffice.LibreOffice", NULL };
+static const char *videoeditor[]   = { "flatpak", "run", "org.kde.kdenlive", NULL };
+static const char *imgeditor[]     = { "flatpak", "run", "org.gimp.GIMP", NULL };
+static const char *handnote[]      = { "flatpak", "run", "com.github.xournalpp.xournalpp", NULL };
 
 /* Keybindings */
 static Keychord *keychords[] = {
@@ -196,9 +209,14 @@ static Keychord *keychords[] = {
     &((Keychord){2, {{MODKEY, XK_p}, {0, XK_q}},            spawn,          SHCMD("$HOME/.config/suckless/dmenu/scripts/dmenu_power") }),
 
     /* Apps */
-    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_e}},            spawn,          SHCMD("$HOME/.local/bin/neovide") }),
-    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_w}},            spawn,          SHCMD("qutebrowser") }),
-    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_c}},            spawn,          SHCMD("flatpak run org.signal.Signal") }),
+    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_e}},            spawn,          {.v = editor } }),
+    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_w}},            spawn,          {.v = browser } }),
+    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_c}},            spawn,          {.v = chat } }),
+    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_v}},            spawn,          {.v = virtuamachine } }),
+    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_o}},            spawn,          {.v = office } }),
+    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_k}},            spawn,          {.v = videoeditor } }),
+    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_i}},            spawn,          {.v = imgeditor } }),
+    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_x}},            spawn,          {.v = handnote } }),
 
     /* Keyboard Layouts */
     &((Keychord){2, {{MODKEY, XK_x}, {0, XK_e}},            spawn,          SHCMD("setxkbmap -layout es && pkill -RTMIN+10 dwmblocks") }),
@@ -228,7 +246,6 @@ static Keychord *keychords[] = {
     &((Keychord){1, {{0, XF86XK_News}},                     spawn,          SHCMD("st -n newsboat -c newsboat -e newsboat") }),
 
     /* Window Management */
-    &((Keychord){1, {{MODKEY, XK_f}},                       fullscreen,     {0} }),
     &((Keychord){1, {{MODKEY, XK_j}},                       focusstack,     {.i = +1 } }),
     &((Keychord){1, {{MODKEY, XK_k}},                       focusstack,     {.i = -1 } }),
     &((Keychord){1, {{MODKEY|ShiftMask, XK_j}},             movestack,      {.i = -1 } }),
@@ -238,13 +255,23 @@ static Keychord *keychords[] = {
     &((Keychord){1, {{MODKEY, XK_h}},                       setmfact,       {.f = -0.05} }),
     &((Keychord){1, {{MODKEY, XK_l}},                       setmfact,       {.f = +0.05} }),
     &((Keychord){1, {{MODKEY|ControlMask, XK_Return}},      zoom,           {0} }),
+    &((Keychord){1, {{MODKEY|ShiftMask, XK_Return}},        focusmaster,    {0} }),
+    &((Keychord){1, {{MODKEY|Mod1Mask, XK_Return}},         togglemaster,   {0} }),
     &((Keychord){1, {{MODKEY, XK_Tab}},                     view,           {0} }),
     &((Keychord){1, {{MODKEY, XK_q}},                       killclient,     {0} }),
-    &((Keychord){1, {{MODKEY, XK_t}},                       setlayout,      {.v = &layouts[0]} }),
-    &((Keychord){1, {{MODKEY, XK_f}},                       setlayout,      {.v = &layouts[1]} }),
-    &((Keychord){1, {{MODKEY, XK_m}},                       setlayout,      {.v = &layouts[2]} }),
-    &((Keychord){1, {{MODKEY, XK_space}},                   setlayout,      {0} }),
-    &((Keychord){1, {{MODKEY|ControlMask, XK_space}},       togglefloating, {0} }),
+    &((Keychord){2, {{MODKEY, XK_c}, {0, XK_t}},            setlayout,      {.v = &layouts[0]} }),
+    &((Keychord){2, {{MODKEY, XK_c}, {0, XK_f}},            setlayout,      {.v = &layouts[1]} }),
+    &((Keychord){2, {{MODKEY, XK_c}, {0, XK_m}},            setlayout,      {.v = &layouts[2]} }),
+    &((Keychord){2, {{MODKEY, XK_c}, {0, XK_c}},            setlayout,      {.v = &layouts[3]} }),
+    &((Keychord){2, {{MODKEY, XK_c}, {0, XK_v}},            setlayout,      {.v = &layouts[4]} }),
+    &((Keychord){2, {{MODKEY, XK_c}, {0, XK_d}},            setlayout,      {.v = &layouts[5]} }),
+    &((Keychord){2, {{MODKEY, XK_c}, {0, XK_s}},            setlayout,      {.v = &layouts[6]} }),
+    &((Keychord){2, {{MODKEY, XK_c}, {0, XK_g}},            setlayout,      {.v = &layouts[7]} }),
+    &((Keychord){1, {{MODKEY, XK_f}},                       fullscreen,     {0} }),
+    &((Keychord){1, {{MODKEY|ShiftMask, XK_space}},         setlayout,      {0} }),
+    &((Keychord){1, {{MODKEY, XK_space}},                   cyclelayout,    {.i = -1 } }),
+    &((Keychord){1, {{MODKEY|ControlMask, XK_space}},       cyclelayout,    {.i = +1 } }),
+    &((Keychord){1, {{MODKEY|Mod1Mask, XK_space}},          togglefloating, {0} }),
     &((Keychord){1, {{MODKEY, XK_0}},                       view,           {.ui = ~0 } }),
     &((Keychord){1, {{MODKEY|ShiftMask, XK_0}},             tag,            {.ui = ~0 } }),
     &((Keychord){1, {{MODKEY, XK_comma}},                   focusmon,       {.i = -1 } }),
@@ -266,7 +293,7 @@ static Keychord *keychords[] = {
     &((Keychord){2, {{MODKEY, XK_s}, {0, XK_r}},  	        togglescratch,  {.ui = 9 } }),
 
     /* Session Management */
-    /* &((Keychord){1, {{MODKEY|ShiftMask, XK_q}},           quit,           {0} }), */
+    &((Keychord){1, {{MODKEY|ControlMask|ShiftMask, XK_q}}, quit,           {0} }), 
     &((Keychord){1, {{MODKEY|ControlMask, XK_r}},           quit,           {1} }),
 
     /* Tag Keys */
@@ -281,20 +308,37 @@ static Keychord *keychords[] = {
     TAGKEYS(XK_9, 8)
 };
 
+/* Mouse scroll resize */
+static const int scrollsensetivity = 10; /* 1 means resize window by 1 pixel for each scroll event */
+
+/* Resizemousescroll direction argument list */
+static const int scrollargs[][2] = {
+    /* width change         height change */
+    { +scrollsensetivity,	0 },
+    { -scrollsensetivity,	0 },
+    { 0, 				  	+scrollsensetivity },
+    { 0, 					-scrollsensetivity },
+};
+
 /* Mouse Bindings */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkTagBar,            0,              Button1,        view,           {0} },
-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+    { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
+    { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+    { ClkWinTitle,          0,              Button2,        zoom,           {0} },
+    { ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+    { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+    { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+    { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+    { ClkClientWin,         MODKEY,         Button4,        resizemousescroll, {.v = &scrollargs[0]} },
+    { ClkClientWin,         MODKEY,         Button5,        resizemousescroll, {.v = &scrollargs[1]} },
+    { ClkClientWin,         MODKEY,         Button6,        resizemousescroll, {.v = &scrollargs[2]} },
+    { ClkClientWin,         MODKEY,         Button7,        resizemousescroll, {.v = &scrollargs[3]} },
+    { ClkTagBar,            0,              Button1,        view,           {0} },
+    { ClkTagBar,            0,              Button3,        toggleview,     {0} },
+    { ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+    { ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
+
 
