@@ -604,17 +604,32 @@ void combotag(const Arg *arg) {
 }
 
 void comboview(const Arg *arg) {
-	unsigned newtags = arg->ui & TAGMASK;
-	if (combo) {
-		selmon->tagset[selmon->seltags] |= newtags;
-	} else {
-		selmon->seltags ^= 1;	/*toggle tagset*/
-		combo = 1;
-		if (newtags)
-			selmon->tagset[selmon->seltags] = newtags;
-	}
-	focus(NULL);
-	arrange(selmon);
+    unsigned int newtags = arg->ui & TAGMASK;
+    if (combo) {
+        selmon->tagset[selmon->seltags] |= newtags;
+    }
+    else {
+        selmon->seltags ^= 1; /* toggle tagset */
+        combo = 1;
+        if (newtags)
+            selmon->tagset[selmon->seltags] = newtags;
+
+        // Update pertag information for the current tag
+        selmon->pertag->prevtag = selmon->pertag->curtag;
+        selmon->pertag->curtag = newtags ? ffs(newtags) : 0;
+
+        // Apply settings for this view
+        selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
+        selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
+        selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
+        selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
+        selmon->lt[selmon->sellt ^ 1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt ^ 1];
+
+        if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
+            togglebar(NULL);
+    }
+    focus(NULL);
+    arrange(selmon);
 }
 
 void configure(Client *c) {
