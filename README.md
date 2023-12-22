@@ -20,7 +20,7 @@ These are the supported layots in my dwm build
 
 ## Scratchpads
 A scratchpad is a convenient way to access and hide frequently used
-applications. Applications launched in the scratchpad can be toggled with a
+applications. Applications launched in a scratchpad can be toggled with a
 keybinding, making it easy to keep them accessible without cluttering the main
 workspace.
 
