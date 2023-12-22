@@ -24,5 +24,5 @@ sudo xbps-install -S base-devel cmake clang llvm rust nodejs vala
 
 ### VMs & Containers dependencies
 ``` sh
-sudo xbps-install -S libvirt virt-manager iptables-nft dnsmasq openbsd-netcat dmidecode podman
+sudo xbps-install -S libvirt virt-manager qemu iptables-nft dnsmasq openbsd-netcat dmidecode podman
 ```
