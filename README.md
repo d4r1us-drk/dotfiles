@@ -18,7 +18,7 @@ These are the supported layots in my dwm build
 - Dwindle: Windows are arranged in a spiral pattern.
 - Spiral: Similar to dwindle but in the opposite direction.
 
-## Scratchpad Applications
+## Scratchpads
 A scratchpad is a convenient way to access and hide frequently used
 applications. Applications launched in the scratchpad can be toggled with a
 keybinding, making it easy to keep them accessible without cluttering the main
@@ -35,6 +35,23 @@ The following applications are configured to be launched in the scratchpad:
 - Music Player (cmus)
 - File Manager (vifm)
 - News Reader (newsboat)
+
+## Keychords
+A keychord refers to a combination of two or more keybindings pressed one after
+another to trigger a specific action or function. This feature is particularly
+powerful for users who want to improve their workflow by assigning complex
+layers of keybindings for all kinds of purposes. The keychord patch in dwm
+extends its native keybinding capabilities, allowing users to create powerful
+and efficient combinations for various tasks.
+
+An analogous example can be drawn from the Emacs text editor, which pioneered
+the concept of keychords. In Emacs, pressing a sequence of keybindings in
+order, such as "Ctrl" and "x," followed by "Ctrl" and "f" (written as `C-x
+C-f`), opens the file menu.
+
+In my dwm build I use keychords for changing keyboard layouts, launching
+applications or scratchpads and more. This is the way I manage some of my
+keybindings, so I can have tons of keybindings for whatever I will ever need.
 
 ## Main Configuration Files
 - `user/.config/suckless/dwm/config.h`: Main configuration file for dwm.
