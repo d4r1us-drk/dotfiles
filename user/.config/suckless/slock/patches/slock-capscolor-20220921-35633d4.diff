@@ -1,0 +1,88 @@
+From da1721b1b4bb0aa8f94537ddd2a3eada1df00a30 Mon Sep 17 00:00:00 2001
+From: Max Schillinger <maxschillinger@web.de>
+Date: Wed, 21 Sep 2022 19:56:58 +0200
+Subject: [PATCH] Update capscolor patch to match the latest slock commit
+ (35633d4)
+
+---
+ config.def.h |  1 +
+ slock.c      | 15 ++++++++++++---
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/config.def.h b/config.def.h
+index 9855e21..6288856 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -6,6 +6,7 @@ static const char *colorname[NUMCOLS] = {
+ 	[INIT] =   "black",     /* after initialization */
+ 	[INPUT] =  "#005577",   /* during input */
+ 	[FAILED] = "#CC3333",   /* wrong password */
++	[CAPS] = "red",         /* CapsLock on */
+ };
+ 
+ /* treat a cleared input like a wrong password (color) */
+diff --git a/slock.c b/slock.c
+index 5ae738c..5f4fb7a 100644
+--- a/slock.c
++++ b/slock.c
+@@ -18,6 +18,7 @@
+ #include <X11/keysym.h>
+ #include <X11/Xlib.h>
+ #include <X11/Xutil.h>
++#include <X11/XKBlib.h>
+ 
+ #include "arg.h"
+ #include "util.h"
+@@ -28,6 +29,7 @@ enum {
+ 	INIT,
+ 	INPUT,
+ 	FAILED,
++	CAPS,
+ 	NUMCOLS
+ };
+ 
+@@ -130,16 +132,20 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
+ {
+ 	XRRScreenChangeNotifyEvent *rre;
+ 	char buf[32], passwd[256], *inputhash;
+-	int num, screen, running, failure, oldc;
+-	unsigned int len, color;
++	int caps, num, screen, running, failure, oldc;
++	unsigned int len, color, indicators;
+ 	KeySym ksym;
+ 	XEvent ev;
+ 
+ 	len = 0;
++	caps = 0;
+ 	running = 1;
+ 	failure = 0;
+ 	oldc = INIT;
+ 
++	if (!XkbGetIndicatorState(dpy, XkbUseCoreKbd, &indicators))
++		caps = indicators & 1;
++
+ 	while (running && !XNextEvent(dpy, &ev)) {
+ 		if (ev.type == KeyPress) {
+ 			explicit_bzero(&buf, sizeof(buf));
+@@ -179,6 +185,9 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
+ 				if (len)
+ 					passwd[--len] = '\0';
+ 				break;
++			case XK_Caps_Lock:
++				caps = !caps;
++				break;
+ 			default:
+ 				if (num && !iscntrl((int)buf[0]) &&
+ 				    (len + num < sizeof(passwd))) {
+@@ -187,7 +196,7 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
+ 				}
+ 				break;
+ 			}
+-			color = len ? INPUT : ((failure || failonclear) ? FAILED : INIT);
++			color = len ? (caps ? CAPS : INPUT) : (failure || failonclear ? FAILED : INIT);
+ 			if (running && oldc != color) {
+ 				for (screen = 0; screen < nscreens; screen++) {
+ 					XSetWindowBackground(dpy,
+-- 
+2.37.3
+

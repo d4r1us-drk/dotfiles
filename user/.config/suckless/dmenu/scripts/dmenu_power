@@ -30,6 +30,11 @@ pwrs="$pwr1\n$pwr2\n$pwr3\n$pwr4"
 #####
 currentpwr=$(powerprofilesctl get)
 
+##### 
+## This variable will store the current wallpaper set by feh
+#####
+currentwall=$(tail --lines=1 "$HOME/.fehbg" | awk '{print $4}' | sed "s/'//g")
+
 ##########
 ## main ##
 ##########
@@ -45,10 +50,10 @@ case "$action" in
         loginctl poweroff;
         ;;
     "$option4")
-        slock loginctl suspend;
+        slock -b "$currentwall" loginctl suspend;
         ;;
     "$option5")
-        slock;
+        slock -b "$currentwall";
         ;;
     "$option6")
         #####

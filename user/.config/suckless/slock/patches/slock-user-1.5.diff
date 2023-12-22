@@ -1,0 +1,47 @@
+From 7f1f66dfb1feb2b6df87565f1b895dd7a12d7ceb Mon Sep 17 00:00:00 2001
+From: Phillip Tischler <ptgit@protonmail.com>
+Date: Sat, 18 Mar 2023 22:59:55 +0100
+Subject: [PATCH] Always use the current users password ($USER)
+
+---
+ config.def.h | 4 ----
+ slock.c      | 8 ++++----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/config.def.h b/config.def.h
+index 9855e21..3229e62 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -1,7 +1,3 @@
+-/* user and group to drop privileges to */
+-static const char *user  = "nobody";
+-static const char *group = "nogroup";
+-
+ static const char *colorname[NUMCOLS] = {
+ 	[INIT] =   "black",     /* after initialization */
+ 	[INPUT] =  "#005577",   /* during input */
+diff --git a/slock.c b/slock.c
+index 5ae738c..7444eac 100644
+--- a/slock.c
++++ b/slock.c
+@@ -325,13 +325,13 @@ main(int argc, char **argv) {
+ 
+ 	/* validate drop-user and -group */
+ 	errno = 0;
+-	if (!(pwd = getpwnam(user)))
+-		die("slock: getpwnam %s: %s\n", user,
++	if (!(pwd = getpwnam(getenv("USER"))))
++		die("slock: getpwnam %s: %s\n", getenv("USER"),
+ 		    errno ? strerror(errno) : "user entry not found");
+ 	duid = pwd->pw_uid;
+ 	errno = 0;
+-	if (!(grp = getgrnam(group)))
+-		die("slock: getgrnam %s: %s\n", group,
++	if (!(grp = getgrnam(getenv("USER"))))
++		die("slock: getgrnam %s: %s\n", getenv("USER"),
+ 		    errno ? strerror(errno) : "group entry not found");
+ 	dgid = grp->gr_gid;
+ 
+-- 
+2.30.2
+
