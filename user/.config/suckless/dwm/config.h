@@ -1,4 +1,4 @@
-/* appearance */
+/* Appearance */
 static const unsigned int borderpx    = 1;        /* border pixel of windows */
 static const unsigned int snap        = 32;       /* snap pixel */
 static const int showbar              = 1;        /* 0 means no bar */
@@ -78,77 +78,78 @@ static const Rule rules[] = {
      */
     /* CLASS - INSTANCE - TITLE - TAGS MASK - ISFLOATING - MONITOR */
     /* 0 - No Tag */
-    {"Galculator",                NULL,        NULL,         0,   1,   -1},
-    {"Qalculate-gtk",             NULL,        NULL,         0,   1,   -1},
+    {"Galculator",                      NULL,        NULL,         0,   1,   -1},
+    {"Qalculate-gtk",                   NULL,        NULL,         0,   1,   -1},
     /* 1 - Code Tag */
-    {"editor",                    NULL,        NULL,         1,   0,   -1},
-    {"Emacs",                     NULL,        NULL,         1,   0,   -1},
-    {"Godot",                     NULL,        NULL,         1,   0,   -1},
-    {"neovim",                    NULL,        NULL,         1,   0,   -1},
-    {"neovide",                   NULL,        NULL,         1,   0,   -1},
+    {"editor",                          NULL,        NULL,         1,   0,   -1},
+    {"Emacs",                           NULL,        NULL,         1,   0,   -1},
+    {"Godot",                           NULL,        NULL,         1,   0,   -1},
+    {"neovim",                          NULL,        NULL,         1,   0,   -1},
+    {"neovide",                         NULL,        NULL,         1,   0,   -1},
     /* 2 - Test Tag */
-    {"Virt-manager",              NULL,        NULL,    1 << 1,   0,   -1},
-    {"Gnome-boxes",               NULL,        NULL,    1 << 1,   0,   -1},
+    {"Virt-manager",                    NULL,        NULL,    1 << 1,   0,   -1},
+    {"Gnome-boxes",                     NULL,        NULL,    1 << 1,   0,   -1},
     /* 3 - Web Tag */
-    {"LibreWolf",                 NULL,        NULL,    1 << 2,   0,   -1},
-    {"librewolf-default",         NULL,        NULL,    1 << 2,   0,   -1},
-    {"firefox",                   NULL,        NULL,    1 << 2,   0,   -1},
-    {"qutebrowser",               NULL,        NULL,    1 << 2,   0,   -1},
-    {"Chromium",                  NULL,        NULL,    1 << 2,   0,   -1},
-    {"Brave-browser",             NULL,        NULL,    1 << 2,   0,   -1},
-    {"Bitwarden",                 NULL,        NULL,    1 << 2,   0,   -1},
-    {"newsboat",                  NULL,        NULL,    1 << 2,   0,   -1},
+    {"LibreWolf",                       NULL,        NULL,    1 << 2,   0,   -1},
+    {"librewolf-default",               NULL,        NULL,    1 << 2,   0,   -1},
+    {"firefox",                         NULL,        NULL,    1 << 2,   0,   -1},
+    {"qutebrowser",                     NULL,        NULL,    1 << 2,   0,   -1},
+    {"Chromium",                        NULL,        NULL,    1 << 2,   0,   -1},
+    {"Brave-browser",                   NULL,        NULL,    1 << 2,   0,   -1},
+    {"Bitwarden",                       NULL,        NULL,    1 << 2,   0,   -1},
+    {"newsboat",                        NULL,        NULL,    1 << 2,   0,   -1},
     /* 4 - Chat Tag */
-    {"Signal",                    NULL,        NULL,    1 << 3,   0,   -1},
+    {"Signal",                          NULL,        NULL,    1 << 3,   0,   -1},
     /* 5 - Audio Tools Tag */
-    {"Audacity",                  NULL,        NULL,    1 << 4,   0,   -1},
-    {"Ardour",                    NULL,        NULL,    1 << 4,   0,   -1},
-    {"Carla2",                    NULL,        NULL,    1 << 4,   0,   -1},
-    {"Carla2-Control",            NULL,        NULL,    1 << 4,   0,   -1},
-    {"QjackCtl",                  NULL,        NULL,    1 << 4,   1,   -1},
-    {"lsp-plugins",               NULL,        NULL,    1 << 4,   1,   -1},
-    {"qpwgraph",                  NULL,        NULL,    1 << 4,   0,   -1},
-    {"Cadence",                   NULL,        NULL,    1 << 4,   0,   -1},
-    {"easyeffects",               NULL,        NULL,    1 << 4,   0,   -1},
+    {"Audacity",                        NULL,        NULL,    1 << 4,   0,   -1},
+    {"Ardour",                          NULL,        NULL,    1 << 4,   0,   -1},
+    {"Carla2",                          NULL,        NULL,    1 << 4,   0,   -1},
+    {"Carla2-Control",                  NULL,        NULL,    1 << 4,   0,   -1},
+    {"QjackCtl",                        NULL,        NULL,    1 << 4,   1,   -1},
+    {"lsp-plugins",                     NULL,        NULL,    1 << 4,   1,   -1},
+    {"qpwgraph",                        NULL,        NULL,    1 << 4,   0,   -1},
+    {"Cadence",                         NULL,        NULL,    1 << 4,   0,   -1},
+    {"easyeffects",                     NULL,        NULL,    1 << 4,   0,   -1},
     /* 6 - Video Tag */
-    {"kdenlive",                  NULL,        NULL,    1 << 5,   0,   -1},
-    {"Pitivi",                    NULL,        NULL,    1 << 5,   0,   -1},
-    {"Natron",                    NULL,        NULL,    1 << 5,   0,   -1},
-    {"SimpleScreenRecorder",      NULL,        NULL,    1 << 5,   0,   -1},
-    {"Ghb",                       NULL,        NULL,    1 << 5,   0,   -1},
-    {"obs",                       NULL,        NULL,    1 << 5,   0,   -1},
-    {"mpv",                       NULL,        NULL,    1 << 5,   0,   -1},
+    {"kdenlive",                        NULL,        NULL,    1 << 5,   0,   -1},
+    {"Pitivi",                          NULL,        NULL,    1 << 5,   0,   -1},
+    {"Natron",                          NULL,        NULL,    1 << 5,   0,   -1},
+    {"SimpleScreenRecorder",            NULL,        NULL,    1 << 5,   0,   -1},
+    {"Ghb",                             NULL,        NULL,    1 << 5,   0,   -1},
+    {"obs",                             NULL,        NULL,    1 << 5,   0,   -1},
+    {"mpv",                             NULL,        NULL,    1 << 5,   0,   -1},
     /* 7 - Graphics Tools Tag */
-    {"Blender",                   NULL,        NULL,    1 << 6,   0,   -1},
-    {"Gimp-2.10",                 NULL,        NULL,    1 << 6,   0,   -1},
-    {"krita",                     NULL,        NULL,    1 << 6,   0,   -1},
-    {"Inkscape",                  NULL,        NULL,    1 << 6,   0,   -1},
-    {"Xournalpp",                 NULL,        NULL,    1 << 6,   0,   -1},
+    {"Blender",                         NULL,        NULL,    1 << 6,   0,   -1},
+    {"Gimp-2.10",                       NULL,        NULL,    1 << 6,   0,   -1},
+    {"krita",                           NULL,        NULL,    1 << 6,   0,   -1},
+    {"Inkscape",                        NULL,        NULL,    1 << 6,   0,   -1},
+    {"Xournalpp",                       NULL,        NULL,    1 << 6,   0,   -1},
+    {"Com.github.xournalpp.xournalpp",  NULL,        NULL,    1 << 6,   0,   -1},
     /* 8 - Office Tag */
-    {"DesktopEditors",            NULL,        NULL,    1 << 7,   0,   -1},
-    {"Soffice",                   "soffice",   NULL,    1 << 7,   0,   -1},
-    {"libreoffice-startcenter",   NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-calc",          NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-writer",        NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-impress",       NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-base",          NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-draw",          NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-math",          NULL,        NULL,    1 << 7,   0,   -1},
-    {"Joplin",                    NULL,        NULL,    1 << 7,   0,   -1},
+    {"DesktopEditors",                  NULL,        NULL,    1 << 7,   0,   -1},
+    {"Soffice",                         "soffice",   NULL,    1 << 7,   0,   -1},
+    {"libreoffice-startcenter",         NULL,        NULL,    1 << 7,   0,   -1},
+    {"libreoffice-calc",                NULL,        NULL,    1 << 7,   0,   -1},
+    {"libreoffice-writer",              NULL,        NULL,    1 << 7,   0,   -1},
+    {"libreoffice-impress",             NULL,        NULL,    1 << 7,   0,   -1},
+    {"libreoffice-base",                NULL,        NULL,    1 << 7,   0,   -1},
+    {"libreoffice-draw",                NULL,        NULL,    1 << 7,   0,   -1},
+    {"libreoffice-math",                NULL,        NULL,    1 << 7,   0,   -1},
+    {"Joplin",                          NULL,        NULL,    1 << 7,   0,   -1},
     /* 9 - Games Tag */
-    {"retroarch",                 NULL,        NULL,    1 << 8,   0,   -1},
-    {"steam",                     NULL,        NULL,    1 << 8,   0,   -1},
+    {"retroarch",                       NULL,        NULL,    1 << 8,   0,   -1},
+    {"steam",                           NULL,        NULL,    1 << 8,   0,   -1},
     /* Scratchpads */
-    {NULL,                        "sptrm",     NULL,    SPTAG(0), 1,   -1},
-    {NULL,                        "sptop",     NULL,    SPTAG(1), 1,   -1},
-    {NULL,                        "sppmx",     NULL,    SPTAG(2), 1,   -1},
-    {NULL,                        "spfli",     NULL,    SPTAG(3), 1,   -1},
-    {NULL,                        "spani",     NULL,    SPTAG(4), 1,   -1},
-    {NULL,                        "spytf",     NULL,    SPTAG(5), 1,   -1},
-    {NULL,                        "spytm",     NULL,    SPTAG(6), 1,   -1},
-    {NULL,                        "spmsc",     NULL,    SPTAG(7), 1,   -1},
-    {NULL,                        "spflm",     NULL,    SPTAG(8), 1,   -1},
-    {NULL,                        "sprss",     NULL,    SPTAG(9), 1,   -1},
+    {NULL,                              "sptrm",     NULL,    SPTAG(0), 1,   -1},
+    {NULL,                              "sptop",     NULL,    SPTAG(1), 1,   -1},
+    {NULL,                              "sppmx",     NULL,    SPTAG(2), 1,   -1},
+    {NULL,                              "spfli",     NULL,    SPTAG(3), 1,   -1},
+    {NULL,                              "spani",     NULL,    SPTAG(4), 1,   -1},
+    {NULL,                              "spytf",     NULL,    SPTAG(5), 1,   -1},
+    {NULL,                              "spytm",     NULL,    SPTAG(6), 1,   -1},
+    {NULL,                              "spmsc",     NULL,    SPTAG(7), 1,   -1},
+    {NULL,                              "spflm",     NULL,    SPTAG(8), 1,   -1},
+    {NULL,                              "sprss",     NULL,    SPTAG(9), 1,   -1},
 };
 
 /* Layout(s) */
@@ -177,11 +178,11 @@ static const Layout layouts[] = {
         &((Keychord){1, {{MODKEY|ShiftMask, KEY}},						combotag,       {.ui = 1 << TAG} }), \
         &((Keychord){1, {{MODKEY|ControlMask|ShiftMask, KEY}},			toggletag,      {.ui = 1 << TAG} }),
 
-/* helper for spawning shell commands in the pre dwm-5.0 fashion */
+/* Helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* Main commands */
-static const char *dmenucmd[]      = {"dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL};
+static const char *dmenucmd[]      = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]       = { "wezterm", NULL };
 static const char *editor[]        = { "wezterm", "start", "--class", "editor", ".local/bin/lvim", NULL};
 static const char *browser[]       = { "qutebrowser", NULL };

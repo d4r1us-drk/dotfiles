@@ -5,18 +5,12 @@
 ##    / /_/ / /  / /_/ / ,< /  __/  Clay Gomera (Drake)
 ##   /_____/_/   \__,_/_/|_|\___/   My custom bash_profile config
 ##
-
-# starting xsession
+#
+# Starting xsession
 if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-  startx -- vt1 -keeptty &>/dev/null
-  logout
+    startx -- vt1 -keeptty &>/dev/null
+    logout
 fi
-
-# User defined enviroment variables
-export EDITOR="$HOME/.local/bin/lvim"
-export VISUAL="$HOME/.local/bin/neovide"
-export BROWSER=qutebrowser
-export VIEWER=zathura
 
 # Home folders
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -32,10 +26,19 @@ export GTK2_RC_FILES="$HOME/.config/gtk-2.0/gtkrc-2.0"
 export WGETRC="$HOME/.config/wget/wgetrc"
 export INPUTRC="$HOME/.config/inputrc"
 export GNUPGHOME="$HOME/.local/share/gnupg"
-export LESSHISTFILE=-
+export LESSHISTFILE="-"
+
+# Create GNUPG & WGETRC directories if they don't exist
 if [ ! -d "$HOME/.config/wget/" ] && [ ! -d "$GNUPGHOME" ]; then
     mkdir -p "$HOME/.config/wget/" "$GNUPGHOME"
 fi
 
-# bashrc
+# Default apps
+export TERMINAL="wezterm"
+export EDITOR="$HOME/.local/bin/lvim"
+export VISUAL="$TERMINAL start --class editor $EDITOR"
+export BROWSER="qutebrowser"
+export VIEWER="zathura"
+
+# Bashrc
 source "$HOME"/.bashrc

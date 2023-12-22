@@ -28,23 +28,20 @@ if [ -f "$usermodmap" ]; then
     xmodmap "$usermodmap"
 fi
 
-# environment variables
+# Environment variables
 export MOZ_USE_XINPUT2=1
 export QT_STYLE_OVERRIDE=kvantum
 export XDG_SESSION_TYPE=X11
 
-# clean home
+# Home folders
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DESKTOP_DIR="$HOME/var/desktop"
-export XDG_DOWNLOAD_DIR="$HOME/var/downloads"
-export XDG_TEMPLATES_DIR="$HOME/media/documents/templates"
-export XDG_PUBLICSHARE_DIR="$HOME/var/public"
-export XDG_DOCUMENTS_DIR="$HOME/media/documents"
-export XDG_MUSIC_DIR="$HOME/media/music"
-export XDG_PICTURES_DIR="$HOME/media/pictures"
-export XDG_VIDEOS_DIR="$HOME/media/videos"
+
+# Sanely export XDG Base dir variables
+eval "$(sed 's/^[^#].*/export &/g;t;d' ~/.config/user-dirs.dirs)"
+
+# Clean home
 export W3M_DIR="$XDG_DATA_HOME/w3m"
 export GTK2_RC_FILES="$HOME/.config/gtk-2.0/gtkrc-2.0"
 export WGETRC="$HOME/.config/wget/wgetrc"
@@ -52,9 +49,15 @@ export INPUTRC="$HOME/.config/inputrc"
 export GNUPGHOME="$HOME/.local/share/gnupg"
 export LESSHISTFILE="-"
 
-# default apps
-export EDITOR="~/.local/bin/lvim"
-export VISUAL="neovide --neovim-bin $EDITOR"
+# Create GNUPG & WGETRC directories if they don't exist
+if [ ! -d "$HOME/.config/wget/" ] && [ ! -d "$GNUPGHOME" ]; then
+    mkdir -p "$HOME/.config/wget/" "$GNUPGHOME"
+fi
+
+# Default apps
+export TERMINAL="wezterm"
+export EDITOR="$HOME/.local/bin/lvim"
+export VISUAL="$TERMINAL start --class editor $EDITOR"
 export BROWSER="qutebrowser"
 export VIEWER="zathura"
 
