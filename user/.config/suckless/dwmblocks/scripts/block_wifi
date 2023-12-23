@@ -5,13 +5,8 @@
 #  - Dependencies: dwm, dwmblocks, nmcli
 
 #####
-## This function gets the wifi
-## signal strength from nmcli and
-## then converts it from dBm to
-## values from 1 to 4
-#####
-## param: none
-## return: string
+## This function gets the wifi signal strength from nmcli and then converts
+## it from dBm to values from 1 to 4
 #####
 get_wifi_strength() {
     # Retrieves the wifi signal strength in dBm
@@ -28,10 +23,12 @@ get_wifi_strength() {
     fi
 }
 
-# this variable will store the current state of the connection (connected or disconnected)
+# this variable will store the current state of the connection (connected or
+# disconnected)
 constate=$(nmcli dev | grep wifi | sed 's/ \{2,\}/|/g' | cut -d '|' -f3 | head -1)
 
-# this variable will store the name of the wifi network that the computer is currently connected to
+# this variable will store the name of the wifi network that the computer is
+# currently connected to
 currentwfi=$(nmcli dev | grep wifi | sed 's/ \{2,\}/|/g' | cut -d '|' -f4 | head -1)
 
 if [ "$constate" = "disconnected" ]; then # if the computer is disconnected
