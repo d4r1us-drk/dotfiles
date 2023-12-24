@@ -142,6 +142,7 @@ In my dwm build I use keychords for changing keyboard layouts, launching applica
 | `MODKEY + Control + space` | Cycle through available layouts (in reverse) |
 | `MODKEY + Shift + space` | Switch to last used layout |
 | `MODKEY + Mod1 + space` | Toggle floating status for the focused window |
+| `MODKEY + Mod1 + Tab` | Toggle sticky status for the focused window (show on all tags) |
 | `MODKEY + f` | Toggle fullscreen status for the focused window |
 | `MODKEY + 0` | View all tags |
 | `MODKEY + Shift + 0` | Tag all windows with the current tag |
