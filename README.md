@@ -22,7 +22,7 @@ A scratchpad is a convenient way to access and hide frequently used applications
 
 The following applications are configured to be launched in the scratchpad:
 
-- Terminal (wezterm)
+- Terminal (st)
 - System Monitor (btop)
 - Audio Mixer (pulsemixer)
 - Movies from the terminal (flix-cli)
@@ -41,12 +41,13 @@ An analogous example can be drawn from the Emacs text editor, which pioneered th
 In my dwm build I use keychords for changing keyboard layouts, launching applications or scratchpads and more. This is the way I manage some of my keybindings, so I can have tons of keybindings for whatever I will ever need.
 
 ## Main Configuration Files
-- `user/.config/suckless/dwm/config.h`: Main configuration file for dwm.
-- `user/.config/suckless/dwm/autostart`: Script to be executed on dwm startup.
-- `user/.config/suckless/dmenu/scripts/`: Miscellaneous dmenu scripts used in the setup (these are super useful).
-- `user/.config/wezterm/`: Configuration files for the wezterm terminal emulator.
+- `user/.config/suckless/dwm`: dwm source code directory.
+- `user/.config/suckless/dwmblocks`: dwmblocks source code directory with bar scripts.
+- `user/.config/suckless/dmenu`: dmenu source code directory with dmenu scripts (these are super useful).
+- `user/.config/suckless/st`: st source code directory.
+- `user/.config/suckless/herbe`: herbe notification daemon source code directory (includes tiramisu).
+- `user/.config/suckless/slock`: slock lock screen source code directory.
 - `user/.config/picom/`: Configuration files for the picom compositor.
-- `user/.config/dunst/`: Configuration files for the dunst notification daemon.
 - `user/.config/lvim/`: Configuration files for the lunarvim text editor.
 - `user/.config/qutebrowser/`: Configuration files for the qutebrowser web browser.
 - `user/.config/newsboat/`: Configuration files for the newsboat rss reader.
@@ -64,7 +65,7 @@ In my dwm build I use keychords for changing keyboard layouts, launching applica
 ### General Keybindings
 | Keybinding | Action                            |
 |------------|-----------------------------------|
-| `MODKEY + Return` | Open terminal (wezterm)  |
+| `MODKEY + Return` | Open terminal (st)  |
 | `MODKEY + b` | Toggle the status bar |
 | `MODKEY + Control + Shift + q` | Quit dwm |
 | `MODKEY + Control + r` | Restart dwm |
@@ -152,7 +153,7 @@ In my dwm build I use keychords for changing keyboard layouts, launching applica
 ### Scratchpads Keybindings
 | Keybinding | Action                            |
 |------------|-----------------------------------|
-| `MODKEY + Shift + x + Return` | Launch wezterm (terminal) in scratchpad |
+| `MODKEY + Shift + x + Return` | Launch st (terminal) in scratchpad |
 | `MODKEY + x, b` | Launch btop (system monitor) in scratchpad |
 | `MODKEY + x, p` | Launch pulsemixer (audio mixer) in scratchpad |
 | `MODKEY + x, f` | Launch flix-cli (movies) in scratchpad |
@@ -173,17 +174,17 @@ sudo xbps-install -S git curl wget pipewire wireplumber power-profiles-daemon py
 
 ### Xorg dependencies
 ``` sh
-sudo xbps-install -S xorg-server setxkbmap xclip xev xprop xinit xorg-input-drivers libX11 libX11-devel libXinerama libXinerama-devel libXft libXft-devel libXrandr libXrandr-devel imlib2 imlib2-devel harfbuzz harfbuzz-devel
+sudo xbps-install -S xorg-server setxkbmap xclip xev xprop xinit xorg-input-drivers libX11 libX11-devel libXinerama libXinerama-devel libXft libXft-devel libXrandr libXrandr-devel imlib2 imlib2-devel harfbuzz harfbuzz-devel freetype freetype-devel
 ```
 
 ### Extra dependencies
 ``` sh
-sudo xbps-install -S brightnessctl picom pamixer pulsemixer fd ripgrep jq fzf eza bat arandr playerctl nerd-fonts noto-fonts-ttf noto-fonts-ttf-extra noto-fonts-cjk noto-fonts-emoji cantarell-fonts newsboat vifm cmus cmus-ffmpeg kvantum gtk-engine-murrine zathura zathura-pdf-poppler j4-dmenu-desktop maim slop feh nsxiv chafa dunst xdpyinfo xdotool
+sudo xbps-install -S brightnessctl picom pamixer pulsemixer fd ripgrep jq fzf eza bat arandr playerctl nerd-fonts noto-fonts-ttf noto-fonts-ttf-extra noto-fonts-cjk noto-fonts-emoji cantarell-fonts newsboat vifm cmus cmus-ffmpeg kvantum gtk-engine-murrine zathura zathura-pdf-poppler j4-dmenu-desktop maim slop feh nsxiv chafa xdpyinfo xdotool
 ```
 
 ### Dev dependencies
 ``` sh
-sudo xbps-install -S base-devel cmake clang llvm rust nodejs vala
+sudo xbps-install -S base-devel cmake clang llvm rust cargo nodejs vala
 ```
 
 ### VMs & Containers dependencies
