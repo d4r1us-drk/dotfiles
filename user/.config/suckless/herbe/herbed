@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+#thanks to anufrievroman for style (https://github.com/anufrievroman/polytiramisu/blob/9c0a039d8cd8b7066bccbbd237cd8939da66e1fb/polytiramisu.sh#L18)
+tiramisu -o "#source;#summary;#body;#timeout" | while read line
+do
+    source=$(cut -d ';' -f 1 <<< "$line")
+    summary=$(cut -d ';' -f 2 <<< "$line")
+    body=$(cut -d ';' -f 3 <<< "$line")
+    timeout=$(expr $(cut -d ';' -f 4 <<< "$line") / 1000)
+    if [ "$timeout" -lt 1 ]; then
+        timeout=5
+    fi
+    if [ "$source" = "notify-send" ]; then
+        herbe "$summary" " " "$body" -d "$timeout"
+    else
+        herbe "App: $source" " " "$summary" " " "$body" -d "$timeout"
+    fi
+done

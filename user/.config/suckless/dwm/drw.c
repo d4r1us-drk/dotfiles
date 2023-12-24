@@ -209,6 +209,26 @@ void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled
 		XDrawRectangle(drw->dpy, drw->drawable, drw->gc, x, y, w - 1, h - 1);
 }
 
+/* wrapper function to scale and draw a polygon with X11 */
+void drw_polygon(Drw *drw, int x, int y, int ow, int oh, int sw, int sh, const XPoint *points, int npoints, int shape, int filled) {
+	if (!drw || !drw->scheme)
+		return;
+	XSetForeground(drw->dpy, drw->gc, drw->scheme[ColFg].pixel);
+	if (!filled) { /* reduces the scaled width and height by 1 when drawing the outline to compensate for X11 drawing the line 1 pixel over */
+		sw -= 1;
+		sh -= 1;
+	}
+	XPoint scaledpoints[npoints];
+	memcpy(scaledpoints, points, npoints);
+	for (int v = 0; v < npoints; v++)
+		scaledpoints[v] = (XPoint){ .x = points[v].x * sw / ow + x, .y = points[v].y * sh / oh + y };
+	if (filled)
+		XFillPolygon(drw->dpy, drw->drawable, drw->gc, scaledpoints, npoints, shape, CoordModeOrigin); /* Change shape to 'Convex' or 'Complex' in dwm.c if the shape is not 'Nonconvex' */
+	else
+		XDrawLines(drw->dpy, drw->drawable, drw->gc, scaledpoints, npoints, CoordModeOrigin);
+}
+
+
 int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert) {
 	int i, ty, ellipsis_x = 0;
 	unsigned int tmpw, ew, ellipsis_w = 0, ellipsis_len;

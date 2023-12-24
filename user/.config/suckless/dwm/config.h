@@ -17,6 +17,8 @@ static const char col_gray4[]         = "#fbf1c7";
 static const char col_cyan[]          = "#cc241d";
 static const unsigned int baralpha    = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
+static const XPoint stickyicon[]      = { {0,0}, {4,0}, {4,8}, {2,6}, {0,8}, {0,0} }; /* represents the icon as an array of vertices */
+static const XPoint stickyiconbb      = {4,8};  /* defines the bottom right corner of the polygon's bounding box (speeds up scaling) */
 
 /* Color Definitions */
 static const char *colors[][3]        = {
@@ -31,17 +33,18 @@ static const unsigned int alphas[][3]      = {
     [SchemeSel]  = {OPAQUE, baralpha, borderalpha},
 };
 
+
 /* Scratchpad Definitions */
-const char *spcmd1[]   = {"wezterm", "start", "--class", "sptrm",                   NULL};
-const char *spcmd2[]   = {"wezterm", "start", "--class", "sptop", "btop",           NULL};
-const char *spcmd3[]   = {"wezterm", "start", "--class", "sppmx", "pulsemixer",     NULL};
-const char *spcmd4[]   = {"wezterm", "start", "--class", "spfli", "flix-cli",       NULL};
-const char *spcmd5[]   = {"wezterm", "start", "--class", "spani", "ani-cli",        NULL};
-const char *spcmd6[]   = {"wezterm", "start", "--class", "spytf", "ytfzf", "-flst", NULL};
-const char *spcmd7[]   = {"wezterm", "start", "--class", "spytm", "ytfzf", "-mlst", NULL};
-const char *spcmd8[]   = {"wezterm", "start", "--class", "spmsc", "cmus",           NULL};
-const char *spcmd9[]   = {"wezterm", "start", "--class", "spflm", "vifm",           NULL};
-const char *spcmd10[]  = {"wezterm", "start", "--class", "sprss", "newsboat",       NULL};
+const char *spcmd1[]  = {"st", "-n", "sptrm", "-c", "sptrm", "-g", "140x35", NULL};
+const char *spcmd2[]  = {"st", "-n", "sptop", "-c", "sptop", "-g", "140x35", "-e", "btop", NULL};
+const char *spcmd3[]  = {"st", "-n", "sppmx", "-c", "sppmx", "-g", "140x35", "-e", "pulsemixer", NULL};
+const char *spcmd4[]  = {"st", "-n", "spfli", "-c", "spfli", "-g", "140x35", "-e", "flix-cli", NULL};
+const char *spcmd5[]  = {"st", "-n", "spani", "-c", "spani", "-g", "140x35", "-e", "ani-cli", NULL};
+const char *spcmd6[]  = {"st", "-n", "spytf", "-c", "spytf", "-g", "140x35", "-e", "ytfzf", "-flstT", "chafa", NULL};
+const char *spcmd7[]  = {"st", "-n", "spytm", "-c", "spytm", "-g", "140x35", "-e", "ytfzf", "-mlstT", "chafa", NULL};
+const char *spcmd8[]  = {"st", "-n", "spmsc", "-c", "spmsc", "-g", "140x35", "-e", "cmus", NULL};
+const char *spcmd9[]  = {"st", "-n", "spflm", "-c", "spflm", "-g", "140x35", "-e", "vifm", NULL};
+const char *spcmd10[]  = {"st", "-n", "sprss", "-c", "sprss", "-g", "140x35", "-e", "newsboat", NULL};
 
 static Sp scratchpads[] = {
     /* NAME         CMD */
@@ -183,8 +186,8 @@ static const Layout layouts[] = {
 
 /* Main commands */
 static const char *dmenucmd[]      = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]       = { "wezterm", NULL };
-static const char *editor[]        = { "wezterm", "start", "--class", "editor", ".local/bin/lvim", NULL};
+static const char *termcmd[]       = { "st", NULL };
+static const char *editor[]        = { "st", "-n", "editor", "-c", "editor", "-e", ".local/bin/lvim", NULL};
 static const char *browser[]       = { "qutebrowser", NULL };
 static const char *chat[]          = { "flatpak", "run", "org.signal.Signal", NULL };
 static const char *virtuamachine[] = { "virt-manager", NULL };
@@ -258,6 +261,7 @@ static Keychord *keychords[] = {
     &((Keychord){1, {{MODKEY|ControlMask, XK_Return}},      zoom,           {0} }),
     &((Keychord){1, {{MODKEY|ShiftMask, XK_Return}},        focusmaster,    {0} }),
     &((Keychord){1, {{MODKEY|Mod1Mask, XK_Return}},         togglemaster,   {0} }),
+    &((Keychord){1, {{MODKEY|ShiftMask, XK_Tab}},           togglesticky,   {0} }),
     &((Keychord){1, {{MODKEY, XK_Tab}},                     view,           {0} }),
     &((Keychord){1, {{MODKEY, XK_q}},                       killclient,     {0} }),
     &((Keychord){2, {{MODKEY, XK_c}, {0, XK_t}},            setlayout,      {.v = &layouts[0]} }),
@@ -310,7 +314,7 @@ static Keychord *keychords[] = {
 };
 
 /* Mouse scroll resize */
-static const int scrollsensetivity = 10; /* 1 means resize window by 1 pixel for each scroll event */
+static const int scrollsensetivity = 30; /* 1 means resize window by 1 pixel for each scroll event */
 
 /* Resizemousescroll direction argument list */
 static const int scrollargs[][2] = {

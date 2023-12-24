@@ -1,0 +1,26 @@
+From 07127e600a2854241f08ef976a45aea910cd1238 Mon Sep 17 00:00:00 2001
+From: Elliot Weishaar <elliotweishaar27@gmail.com>
+Date: Fri, 15 Sep 2023 13:48:34 -0500
+Subject: [PATCH] Pressing right-click pastes from the primary section. If
+ combined with the clibpoard-patch right-click pastes from the clipboard
+
+---
+ st/config.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/st/config.h b/st/config.h
+index 968ad8f..3bee657 100644
+--- a/st/config.h
++++ b/st/config.h
+@@ -176,7 +176,7 @@ static uint forcemousemod = ShiftMask;
+  */
+ static MouseShortcut mshortcuts[] = {
+ 	/* mask                 button   function        argument       release */
+-	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
++	{ XK_ANY_MOD,           Button3, selpaste,       {.i = 0},      1 },
+ 	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
+ 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
+ 	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
+-- 
+2.39.2
+

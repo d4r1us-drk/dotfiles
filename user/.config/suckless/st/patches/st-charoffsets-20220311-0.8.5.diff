@@ -1,0 +1,43 @@
+From 944b234710e2fc00ea6e9ce9d925dc85514ac9c3 Mon Sep 17 00:00:00 2001
+From: Zacchary Dempsey-Plante <zacc@ztdp.ca>
+Date: Fri, 11 Mar 2022 01:33:05 -0500
+Subject: [PATCH] Added character rendering offsets for correcting different
+ font dimensions.
+
+---
+ config.def.h | 3 +++
+ x.c          | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/config.def.h b/config.def.h
+index 91ab8ca..8877e5c 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -28,6 +28,9 @@ char *vtiden = "\033[?6c";
+ /* Kerning / character bounding-box multipliers */
+ static float cwscale = 1.0;
+ static float chscale = 1.0;
++/* Character rendering offsets in pixels */
++static short cxoffset = 0;
++static short cyoffset = 0;
+ 
+ /*
+  * word delimiter string
+diff --git a/x.c b/x.c
+index cd96575..6983743 100644
+--- a/x.c
++++ b/x.c
+@@ -1288,8 +1288,8 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
+ 		if (glyphidx) {
+ 			specs[numspecs].font = font->match;
+ 			specs[numspecs].glyph = glyphidx;
+-			specs[numspecs].x = (short)xp;
+-			specs[numspecs].y = (short)yp;
++			specs[numspecs].x = (short)xp + cxoffset;
++			specs[numspecs].y = (short)yp + cyoffset;
+ 			xp += runewidth;
+ 			numspecs++;
+ 			continue;
+-- 
+2.35.1
+

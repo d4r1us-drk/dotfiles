@@ -1,0 +1,112 @@
+From e1cf625f4f225a007a5835421896089669195e02 Mon Sep 17 00:00:00 2001
+From: meator <meator.dev@gmail.com>
+Date: Wed, 26 Oct 2022 13:05:38 +0200
+Subject: [PATCH] Add shortcut to spawn new terminal in the current dir
+
+This commit is inspired by Santtu's st-newterm-20220221-0.8.5.diff. It
+removes the unused res variable, it makes use of _exit() instead of
+exit() and it replaces execlp() with execl() (PATH searching is useless
+when the path is absolute).
+---
+ config.def.h |  1 +
+ st.c         | 38 ++++++++++++++++++++++++++++++++++++++
+ st.h         |  1 +
+ 3 files changed, 40 insertions(+)
+
+diff --git a/config.def.h b/config.def.h
+index 91ab8ca..7c75246 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -201,6 +201,7 @@ static Shortcut shortcuts[] = {
+ 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
+ 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
+ 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
++	{ TERMMOD,              XK_Return,      newterm,        {.i =  0} },
+ };
+ 
+ /*
+diff --git a/st.c b/st.c
+index 62def59..0261283 100644
+--- a/st.c
++++ b/st.c
+@@ -20,6 +20,8 @@
+ #include "st.h"
+ #include "win.h"
+ 
++extern char *argv0;
++
+ #if   defined(__linux)
+  #include <pty.h>
+ #elif defined(__OpenBSD__) || defined(__NetBSD__) || defined(__APPLE__)
+@@ -153,6 +155,7 @@ typedef struct {
+ } STREscape;
+ 
+ static void execsh(char *, char **);
++static int chdir_by_pid(pid_t pid);
+ static void stty(char **);
+ static void sigchld(int);
+ static void ttywriteraw(const char *, size_t);
+@@ -806,6 +809,7 @@ ttynew(const char *line, char *cmd, const char *out, char **args)
+ 		if (pledge("stdio rpath tty proc", NULL) == -1)
+ 			die("pledge\n");
+ #endif
++		fcntl(m, F_SETFD, FD_CLOEXEC);
+ 		close(s);
+ 		cmdfd = m;
+ 		signal(SIGCHLD, sigchld);
+@@ -1054,6 +1058,40 @@ tswapscreen(void)
+ 	tfulldirt();
+ }
+ 
++void
++newterm(const Arg* a)
++{
++	switch (fork()) {
++	case -1:
++		die("fork failed: %s\n", strerror(errno));
++		break;
++	case 0:
++		switch (fork()) {
++		case -1:
++			fprintf(stderr, "fork failed: %s\n", strerror(errno));
++			_exit(1);
++			break;
++		case 0:
++			chdir_by_pid(pid);
++			execl("/proc/self/exe", argv0, NULL);
++			_exit(1);
++			break;
++		default:
++			_exit(0);
++		}
++	default:
++		wait(NULL);
++	}
++}
++
++static int
++chdir_by_pid(pid_t pid)
++{
++	char buf[32];
++	snprintf(buf, sizeof buf, "/proc/%ld/cwd", (long)pid);
++	return chdir(buf);
++}
++
+ void
+ tscrolldown(int orig, int n)
+ {
+diff --git a/st.h b/st.h
+index fd3b0d8..f2b03b0 100644
+--- a/st.h
++++ b/st.h
+@@ -81,6 +81,7 @@ void die(const char *, ...);
+ void redraw(void);
+ void draw(void);
+ 
++void newterm(const Arg *);
+ void printscreen(const Arg *);
+ void printsel(const Arg *);
+ void sendbreak(const Arg *);
+-- 
+2.38.0
+
