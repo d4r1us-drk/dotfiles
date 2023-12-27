@@ -10,7 +10,7 @@ export TERM="xterm-256color"                      # getting proper colors
 export HISTCONTROL=ignoredups:erasedups           # no duplicate entries
 
 ### "bat" as manpager
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+#export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 # use bash-completion, if available
 [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
@@ -188,8 +188,9 @@ alias \
 
 # file management
 alias \
-    fm="vifm" \
-    flm="vifm" \
+    fm="$HOME/.config/vifm/scripts/vifmrun" \
+    flm="$HOME/.config/vifm/scripts/vifmrun" \
+    vifm="$HOME/.config/vifm/scripts/vifmrun" \
     rm="rm -vI" \
     mv="mv -iv" \
     cp="cp -iv" \

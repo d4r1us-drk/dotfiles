@@ -43,8 +43,9 @@ const char *spcmd5[]  = {"st", "-n", "spani", "-c", "spani", "-g", "140x35", "-e
 const char *spcmd6[]  = {"st", "-n", "spytf", "-c", "spytf", "-g", "140x35", "-e", "ytfzf", "-flstT", "chafa", NULL};
 const char *spcmd7[]  = {"st", "-n", "spytm", "-c", "spytm", "-g", "140x35", "-e", "ytfzf", "-mlstT", "chafa", NULL};
 const char *spcmd8[]  = {"st", "-n", "spmsc", "-c", "spmsc", "-g", "140x35", "-e", "cmus", NULL};
-const char *spcmd9[]  = {"st", "-n", "spflm", "-c", "spflm", "-g", "140x35", "-e", "vifm", NULL};
+const char *spcmd9[]  = {"st", "-n", "spflm", "-c", "spflm", "-g", "140x35", "-e", ".config/vifm/scripts/vifmrun", NULL};
 const char *spcmd10[]  = {"st", "-n", "sprss", "-c", "sprss", "-g", "140x35", "-e", "newsboat", NULL};
+const char *spcmd11[]  = {"keepassxc", "--qwindowtitle", "spass", "--qwindowgeometry", "1100x700+50+50", NULL};
 
 static Sp scratchpads[] = {
     /* NAME         CMD */
@@ -58,6 +59,7 @@ static Sp scratchpads[] = {
     {"spmsc",      spcmd8},
     {"spflm",      spcmd9},
     {"sprss",      spcmd10},
+    {"spass",      spcmd11},
 };
 
 /* Tag Definitions */
@@ -81,78 +83,79 @@ static const Rule rules[] = {
      */
     /* CLASS - INSTANCE - TITLE - TAGS MASK - ISFLOATING - MONITOR */
     /* 0 - No Tag */
-    {"Galculator",                      NULL,        NULL,         0,   1,   -1},
-    {"Qalculate-gtk",                   NULL,        NULL,         0,   1,   -1},
+    {"Galculator",                      NULL,        NULL,           0,     1,   -1},
+    {"Qalculate-gtk",                   NULL,        NULL,           0,     1,   -1},
     /* 1 - Code Tag */
-    {"editor",                          NULL,        NULL,         1,   0,   -1},
-    {"Emacs",                           NULL,        NULL,         1,   0,   -1},
-    {"Godot",                           NULL,        NULL,         1,   0,   -1},
-    {"neovim",                          NULL,        NULL,         1,   0,   -1},
-    {"neovide",                         NULL,        NULL,         1,   0,   -1},
+    {"editor",                          NULL,        NULL,           1,     0,   -1},
+    {"Emacs",                           NULL,        NULL,           1,     0,   -1},
+    {"Godot",                           NULL,        NULL,           1,     0,   -1},
+    {"neovim",                          NULL,        NULL,           1,     0,   -1},
+    {"neovide",                         NULL,        NULL,           1,     0,   -1},
     /* 2 - Test Tag */
-    {"Virt-manager",                    NULL,        NULL,    1 << 1,   0,   -1},
-    {"Gnome-boxes",                     NULL,        NULL,    1 << 1,   0,   -1},
+    {"Virt-manager",                    NULL,        NULL,      1 << 1,     0,   -1},
+    {"Gnome-boxes",                     NULL,        NULL,      1 << 1,     0,   -1},
     /* 3 - Web Tag */
-    {"LibreWolf",                       NULL,        NULL,    1 << 2,   0,   -1},
-    {"librewolf-default",               NULL,        NULL,    1 << 2,   0,   -1},
-    {"firefox",                         NULL,        NULL,    1 << 2,   0,   -1},
-    {"qutebrowser",                     NULL,        NULL,    1 << 2,   0,   -1},
-    {"Chromium",                        NULL,        NULL,    1 << 2,   0,   -1},
-    {"Brave-browser",                   NULL,        NULL,    1 << 2,   0,   -1},
-    {"Bitwarden",                       NULL,        NULL,    1 << 2,   0,   -1},
-    {"newsboat",                        NULL,        NULL,    1 << 2,   0,   -1},
+    {"LibreWolf",                       NULL,        NULL,      1 << 2,     0,   -1},
+    {"librewolf-default",               NULL,        NULL,      1 << 2,     0,   -1},
+    {"firefox",                         NULL,        NULL,      1 << 2,     0,   -1},
+    {"qutebrowser",                     NULL,        NULL,      1 << 2,     0,   -1},
+    {"Chromium",                        NULL,        NULL,      1 << 2,     0,   -1},
+    {"Brave-browser",                   NULL,        NULL,      1 << 2,     0,   -1},
+    {"Bitwarden",                       NULL,        NULL,      1 << 2,     0,   -1},
+    {"newsboat",                        NULL,        NULL,      1 << 2,     0,   -1},
     /* 4 - Chat Tag */
-    {"Signal",                          NULL,        NULL,    1 << 3,   0,   -1},
+    {"Signal",                          NULL,        NULL,      1 << 3,     0,   -1},
     /* 5 - Audio Tools Tag */
-    {"Audacity",                        NULL,        NULL,    1 << 4,   0,   -1},
-    {"Ardour",                          NULL,        NULL,    1 << 4,   0,   -1},
-    {"Carla2",                          NULL,        NULL,    1 << 4,   0,   -1},
-    {"Carla2-Control",                  NULL,        NULL,    1 << 4,   0,   -1},
-    {"QjackCtl",                        NULL,        NULL,    1 << 4,   1,   -1},
-    {"lsp-plugins",                     NULL,        NULL,    1 << 4,   1,   -1},
-    {"qpwgraph",                        NULL,        NULL,    1 << 4,   0,   -1},
-    {"Cadence",                         NULL,        NULL,    1 << 4,   0,   -1},
-    {"easyeffects",                     NULL,        NULL,    1 << 4,   0,   -1},
+    {"Audacity",                        NULL,        NULL,      1 << 4,     0,   -1},
+    {"Ardour",                          NULL,        NULL,      1 << 4,     0,   -1},
+    {"Carla2",                          NULL,        NULL,      1 << 4,     0,   -1},
+    {"Carla2-Control",                  NULL,        NULL,      1 << 4,     0,   -1},
+    {"QjackCtl",                        NULL,        NULL,      1 << 4,     1,   -1},
+    {"lsp-plugins",                     NULL,        NULL,      1 << 4,     1,   -1},
+    {"qpwgraph",                        NULL,        NULL,      1 << 4,     0,   -1},
+    {"Cadence",                         NULL,        NULL,      1 << 4,     0,   -1},
+    {"easyeffects",                     NULL,        NULL,      1 << 4,     0,   -1},
     /* 6 - Video Tag */
-    {"kdenlive",                        NULL,        NULL,    1 << 5,   0,   -1},
-    {"Pitivi",                          NULL,        NULL,    1 << 5,   0,   -1},
-    {"Natron",                          NULL,        NULL,    1 << 5,   0,   -1},
-    {"SimpleScreenRecorder",            NULL,        NULL,    1 << 5,   0,   -1},
-    {"Ghb",                             NULL,        NULL,    1 << 5,   0,   -1},
-    {"obs",                             NULL,        NULL,    1 << 5,   0,   -1},
-    {"mpv",                             NULL,        NULL,    1 << 5,   0,   -1},
+    {"kdenlive",                        NULL,        NULL,      1 << 5,     0,   -1},
+    {"Pitivi",                          NULL,        NULL,      1 << 5,     0,   -1},
+    {"Natron",                          NULL,        NULL,      1 << 5,     0,   -1},
+    {"SimpleScreenRecorder",            NULL,        NULL,      1 << 5,     0,   -1},
+    {"Ghb",                             NULL,        NULL,      1 << 5,     0,   -1},
+    {"obs",                             NULL,        NULL,      1 << 5,     0,   -1},
+    {"mpv",                             NULL,        NULL,      1 << 5,     0,   -1},
     /* 7 - Graphics Tools Tag */
-    {"Blender",                         NULL,        NULL,    1 << 6,   0,   -1},
-    {"Gimp-2.10",                       NULL,        NULL,    1 << 6,   0,   -1},
-    {"krita",                           NULL,        NULL,    1 << 6,   0,   -1},
-    {"Inkscape",                        NULL,        NULL,    1 << 6,   0,   -1},
-    {"Xournalpp",                       NULL,        NULL,    1 << 6,   0,   -1},
-    {"Com.github.xournalpp.xournalpp",  NULL,        NULL,    1 << 6,   0,   -1},
+    {"Blender",                         NULL,        NULL,      1 << 6,     0,   -1},
+    {"Gimp-2.10",                       NULL,        NULL,      1 << 6,     0,   -1},
+    {"krita",                           NULL,        NULL,      1 << 6,     0,   -1},
+    {"Inkscape",                        NULL,        NULL,      1 << 6,     0,   -1},
+    {"Xournalpp",                       NULL,        NULL,      1 << 6,     0,   -1},
+    {"Com.github.xournalpp.xournalpp",  NULL,        NULL,      1 << 6,     0,   -1},
     /* 8 - Office Tag */
-    {"DesktopEditors",                  NULL,        NULL,    1 << 7,   0,   -1},
-    {"Soffice",                         "soffice",   NULL,    1 << 7,   0,   -1},
-    {"libreoffice-startcenter",         NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-calc",                NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-writer",              NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-impress",             NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-base",                NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-draw",                NULL,        NULL,    1 << 7,   0,   -1},
-    {"libreoffice-math",                NULL,        NULL,    1 << 7,   0,   -1},
-    {"Joplin",                          NULL,        NULL,    1 << 7,   0,   -1},
+    {"DesktopEditors",                  NULL,        NULL,      1 << 7,     0,   -1},
+    {"Soffice",                         "soffice",   NULL,      1 << 7,     0,   -1},
+    {"libreoffice-startcenter",         NULL,        NULL,      1 << 7,     0,   -1},
+    {"libreoffice-calc",                NULL,        NULL,      1 << 7,     0,   -1},
+    {"libreoffice-writer",              NULL,        NULL,      1 << 7,     0,   -1},
+    {"libreoffice-impress",             NULL,        NULL,      1 << 7,     0,   -1},
+    {"libreoffice-base",                NULL,        NULL,      1 << 7,     0,   -1},
+    {"libreoffice-draw",                NULL,        NULL,      1 << 7,     0,   -1},
+    {"libreoffice-math",                NULL,        NULL,      1 << 7,     0,   -1},
+    {"Joplin",                          NULL,        NULL,      1 << 7,     0,   -1},
     /* 9 - Games Tag */
-    {"retroarch",                       NULL,        NULL,    1 << 8,   0,   -1},
-    {"steam",                           NULL,        NULL,    1 << 8,   0,   -1},
+    {"retroarch",                       NULL,        NULL,      1 << 8,     0,   -1},
+    {"steam",                           NULL,        NULL,      1 << 8,     0,   -1},
     /* Scratchpads */
-    {NULL,                              "sptrm",     NULL,    SPTAG(0), 1,   -1},
-    {NULL,                              "sptop",     NULL,    SPTAG(1), 1,   -1},
-    {NULL,                              "sppmx",     NULL,    SPTAG(2), 1,   -1},
-    {NULL,                              "spfli",     NULL,    SPTAG(3), 1,   -1},
-    {NULL,                              "spani",     NULL,    SPTAG(4), 1,   -1},
-    {NULL,                              "spytf",     NULL,    SPTAG(5), 1,   -1},
-    {NULL,                              "spytm",     NULL,    SPTAG(6), 1,   -1},
-    {NULL,                              "spmsc",     NULL,    SPTAG(7), 1,   -1},
-    {NULL,                              "spflm",     NULL,    SPTAG(8), 1,   -1},
-    {NULL,                              "sprss",     NULL,    SPTAG(9), 1,   -1},
+    {NULL,                              "sptrm",     NULL,      SPTAG(0),   1,   -1},
+    {NULL,                              "sptop",     NULL,      SPTAG(1),   1,   -1},
+    {NULL,                              "sppmx",     NULL,      SPTAG(2),   1,   -1},
+    {NULL,                              "spfli",     NULL,      SPTAG(3),   1,   -1},
+    {NULL,                              "spani",     NULL,      SPTAG(4),   1,   -1},
+    {NULL,                              "spytf",     NULL,      SPTAG(5),   1,   -1},
+    {NULL,                              "spytm",     NULL,      SPTAG(6),   1,   -1},
+    {NULL,                              "spmsc",     NULL,      SPTAG(7),   1,   -1},
+    {NULL,                              "spflm",     NULL,      SPTAG(8),   1,   -1},
+    {NULL,                              "sprss",     NULL,      SPTAG(9),   1,   -1},
+    {"KeePassXC",                       NULL,        "spass",   SPTAG(10),  1,   -1},
 };
 
 /* Layout(s) */
@@ -296,6 +299,7 @@ static Keychord *keychords[] = {
     &((Keychord){2, {{MODKEY, XK_s}, {0, XK_m}},  	        togglescratch,  {.ui = 7 } }),
     &((Keychord){2, {{MODKEY, XK_s}, {0, XK_v}},  	        togglescratch,  {.ui = 8 } }),
     &((Keychord){2, {{MODKEY, XK_s}, {0, XK_r}},  	        togglescratch,  {.ui = 9 } }),
+    &((Keychord){2, {{MODKEY, XK_s}, {0, XK_k}},  	        togglescratch,  {.ui = 10 } }),
 
     /* Session Management */
     &((Keychord){1, {{MODKEY|ControlMask|ShiftMask, XK_q}}, quit,           {0} }), 

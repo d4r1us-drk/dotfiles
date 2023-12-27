@@ -175,7 +175,7 @@ sudo xbps-install -S git curl wget pipewire wireplumber power-profiles-daemon py
 
 ### Xorg dependencies
 ``` sh
-sudo xbps-install -S xorg-server setxkbmap xclip xev xprop xinit xorg-input-drivers libX11 libX11-devel libXinerama libXinerama-devel libXft libXft-devel libXrandr libXrandr-devel imlib2 imlib2-devel harfbuzz harfbuzz-devel freetype freetype-devel
+sudo xbps-install -S xorg-server setxkbmap xclip xev xprop xinit xorg-input-drivers libX11 libX11-devel libXinerama libXinerama-devel libXft libXft-devel libXrandr libXrandr-devel imlib2 imlib2-devel harfbuzz harfbuzz-devel freetype freetype-devel gd gd-devel
 ```
 
 ### Extra dependencies

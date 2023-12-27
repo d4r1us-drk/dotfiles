@@ -41,7 +41,7 @@ currentwall=$(tail --lines=1 "$HOME/.fehbg" | awk '{print $4}' | sed "s/'//g")
 action=$(echo -e "$options" | dmenu -i -p "  Power Options"); # main menu prompt
 case "$action" in
     "$option1")
-        pkill X; # killing X will result in a logout
+        killall -u "$(whoami)"
         ;;
     "$option2")
         loginctl reboot;

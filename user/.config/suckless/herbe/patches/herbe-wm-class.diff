@@ -1,0 +1,21 @@
+diff --git a/herbe.c b/herbe.c
+index 51d3990..fd66078 100644
+--- a/herbe.c
++++ b/herbe.c
+@@ -168,6 +168,9 @@ int main(int argc, char *argv[])
+ 	XftDraw *draw = XftDrawCreate(display, window, visual, colormap);
+ 	XftColorAllocName(display, visual, colormap, font_color, &color);
+ 
++	XClassHint classhint = { "herbe", "herbe" };
++	XSetClassHint(display, window, &classhint);
++
+ 	XSelectInput(display, window, ExposureMask | ButtonPress);
+ 	XMapWindow(display, window);
+ 
+@@ -217,4 +220,4 @@ int main(int argc, char *argv[])
+ 	XCloseDisplay(display);
+ 
+ 	return exit_code;
+-}
+\ No newline at end of file
++}

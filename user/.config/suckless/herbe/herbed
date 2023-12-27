@@ -10,9 +10,5 @@ do
     if [ "$timeout" -lt 1 ]; then
         timeout=5
     fi
-    if [ "$source" = "notify-send" ]; then
-        herbe "$summary" " " "$body" -d "$timeout"
-    else
-        herbe "App: $source" " " "$summary" " " "$body" -d "$timeout"
-    fi
+    herbe "$summary" " " "$body" -d "$timeout"
 done

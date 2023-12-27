@@ -175,7 +175,9 @@ command! reload :write | restart
 " Pdf and cbz
 filextype *.cbz,*.pdf zathura %c %i &, apvlv %c, xpdf %c
 fileviewer *.pdf
-        \ pdftotext -nopgbrk %c -
+        \ vifmimg pdf %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
 
 " PostScript
 filextype *.ps,*.eps,*.ps.gz
@@ -190,24 +192,37 @@ filextype *.djvu
         \ zathura %f,
         \ {View in apvlv}
         \ apvlv %f,
+fileviewer *.djvu
+        \ vifmimg djvu %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+fileviewer *.epub
+        \ vifmimg epub %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
 
 " Audio
 filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
-       \ {Play using mpv}
-       \ mpv %f,
-fileviewer *.mp3 mp3info
-fileviewer *.flac soxi
+        \ {Play using mpv}
+        \ mpv %f,
+fileviewer *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
+        \ vifmimg audio %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
 
 " Video
 filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
-         \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
-         \*.as[fx]
+        \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+        \*.as[fx]
         \ {View using mplayer}
         \ mpv %f,
 fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
-          \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
-          \*.as[fx]
-          \ ffprobe -pretty %c 2>&1
+        \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+        \*.as[fx]
+        \ vifmimg video %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
 
 " Web
 filextype *.html,*.htm
@@ -235,7 +250,15 @@ filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
         \ {View in imv}
         \ imv %f &,
 fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.xpm,*.gif
-        \ wezterm imgcat --width %pw --height %ph %c:p %pd
+        \ vifmimg draw %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+" Fonts
+fileviewer *.ttf, *.otf
+    \ vifmimg font %px %py %pw %ph %c
+    \ %pc
+    \ vifmimg clear
 
 " OpenRaster
 filextype *.ora

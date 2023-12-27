@@ -55,9 +55,9 @@ if [ ! -d "$HOME/.config/wget/" ] && [ ! -d "$GNUPGHOME" ]; then
 fi
 
 # Default apps
-export TERMINAL="wezterm"
+export TERMINAL="st"
 export EDITOR="$HOME/.local/bin/lvim"
-export VISUAL="$TERMINAL start --class editor $EDITOR"
+export VISUAL="$TERMINAL -c editor -n editor -e $EDITOR"
 export BROWSER="qutebrowser"
 export VIEWER="zathura"
 
