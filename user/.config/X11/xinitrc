@@ -1,0 +1,43 @@
+#!/bin/sh
+##       ____             __
+##      / __ \_________ _/ /_____
+##     / / / / ___/ __ `/ //_/ _ \
+##    / /_/ / /  / /_/ / ,< /  __/  Clay Gomera (Drake)
+##   /_____/_/   \__,_/_/|_|\___/   My custom xinitrc
+##
+
+userresources=$HOME/.Xresources
+usermodmap=$HOME/.Xmodmap
+sysresources=/etc/X11/xinit/.Xresources
+sysmodmap=/etc/X11/xinit/.Xmodmap
+
+# merge in defaults and keymaps
+if [ -f $sysresources ]; then
+    xrdb -merge $sysresources
+fi
+
+if [ -f $sysmodmap ]; then
+    xmodmap $sysmodmap
+fi
+
+if [ -f "$userresources" ]; then
+    xrdb -merge "$userresources"
+fi
+
+if [ -f "$usermodmap" ]; then
+    xmodmap "$usermodmap"
+fi
+
+# X11 Stuff
+export MOZ_USE_XINPUT2=1
+export QT_STYLE_OVERRIDE=kvantum
+export XDG_SESSION_TYPE=X11
+
+# GTK & cursor stuff
+export XCURSOR_PATH="$XDG_DATA_HOME/icons/"
+export XCURSOR_THEME="Simp1e-Gruvbox-Dark"
+export GTK_THEME="gruvbox-dark-gtk"
+export GTK_ICON_THEME="gruvbox-dark-icons-gtk"
+
+# start window manager / desktop environment
+dbus-launch dwm

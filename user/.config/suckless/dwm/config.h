@@ -45,7 +45,7 @@ const char *spcmd7[]  = {"st", "-n", "spytm", "-c", "spytm", "-g", "140x35", "-e
 const char *spcmd8[]  = {"st", "-n", "spmsc", "-c", "spmsc", "-g", "140x35", "-e", "cmus", NULL};
 const char *spcmd9[]  = {"st", "-n", "spflm", "-c", "spflm", "-g", "140x35", "-e", ".config/vifm/scripts/vifmrun", NULL};
 const char *spcmd10[]  = {"st", "-n", "sprss", "-c", "sprss", "-g", "140x35", "-e", "newsboat", NULL};
-const char *spcmd11[]  = {"keepassxc", "--qwindowtitle", "spass", "--qwindowgeometry", "1100x700+50+50", NULL};
+const char *spcmd11[]  = {"st", "-n", "sptut", "-c", "sptut", "-g", "140x35", "-e", "tut", NULL};
 
 static Sp scratchpads[] = {
     /* NAME         CMD */
@@ -59,7 +59,7 @@ static Sp scratchpads[] = {
     {"spmsc",      spcmd8},
     {"spflm",      spcmd9},
     {"sprss",      spcmd10},
-    {"spass",      spcmd11},
+    {"sptut",      spcmd11},
 };
 
 /* Tag Definitions */
@@ -155,7 +155,7 @@ static const Rule rules[] = {
     {NULL,                              "spmsc",     NULL,      SPTAG(7),   1,   -1},
     {NULL,                              "spflm",     NULL,      SPTAG(8),   1,   -1},
     {NULL,                              "sprss",     NULL,      SPTAG(9),   1,   -1},
-    {"KeePassXC",                       NULL,        "spass",   SPTAG(10),  1,   -1},
+    {NULL,                              "sptut",     NULL,      SPTAG(10),   1,   -1},
 };
 
 /* Layout(s) */
@@ -191,9 +191,9 @@ static const Layout layouts[] = {
 static const char *dmenucmd[]      = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]       = { "st", NULL };
 static const char *editor[]        = { "st", "-n", "editor", "-c", "editor", "-e", ".local/bin/lvim", NULL};
-static const char *browser[]       = { "qutebrowser", NULL };
+static const char *browser[]       = { "flatpak", "run", "org.mozilla.firefox", NULL };
 static const char *chat[]          = { "flatpak", "run", "org.signal.Signal", NULL };
-static const char *virtuamachine[] = { "virt-manager", NULL };
+static const char *vm[]            = { "virt-manager", NULL };
 static const char *office[]        = { "flatpak", "run", "org.libreoffice.LibreOffice", NULL };
 static const char *videoeditor[]   = { "flatpak", "run", "org.kde.kdenlive", NULL };
 static const char *imgeditor[]     = { "flatpak", "run", "org.gimp.GIMP", NULL };
@@ -219,7 +219,7 @@ static Keychord *keychords[] = {
     &((Keychord){2, {{MODKEY, XK_a}, {0, XK_e}},            spawn,          {.v = editor } }),
     &((Keychord){2, {{MODKEY, XK_a}, {0, XK_w}},            spawn,          {.v = browser } }),
     &((Keychord){2, {{MODKEY, XK_a}, {0, XK_c}},            spawn,          {.v = chat } }),
-    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_v}},            spawn,          {.v = virtuamachine } }),
+    &((Keychord){2, {{MODKEY, XK_a}, {0, XK_v}},            spawn,          {.v = vm } }),
     &((Keychord){2, {{MODKEY, XK_a}, {0, XK_o}},            spawn,          {.v = office } }),
     &((Keychord){2, {{MODKEY, XK_a}, {0, XK_k}},            spawn,          {.v = videoeditor } }),
     &((Keychord){2, {{MODKEY, XK_a}, {0, XK_i}},            spawn,          {.v = imgeditor } }),
@@ -299,7 +299,7 @@ static Keychord *keychords[] = {
     &((Keychord){2, {{MODKEY, XK_s}, {0, XK_m}},  	        togglescratch,  {.ui = 7 } }),
     &((Keychord){2, {{MODKEY, XK_s}, {0, XK_v}},  	        togglescratch,  {.ui = 8 } }),
     &((Keychord){2, {{MODKEY, XK_s}, {0, XK_r}},  	        togglescratch,  {.ui = 9 } }),
-    &((Keychord){2, {{MODKEY, XK_s}, {0, XK_k}},  	        togglescratch,  {.ui = 10 } }),
+    &((Keychord){2, {{MODKEY, XK_s}, {0, XK_t}},  	        togglescratch,  {.ui = 10 } }),
 
     /* Session Management */
     &((Keychord){1, {{MODKEY|ControlMask|ShiftMask, XK_q}}, quit,           {0} }), 
